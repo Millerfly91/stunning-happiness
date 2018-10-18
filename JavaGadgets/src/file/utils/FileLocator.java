@@ -57,6 +57,17 @@ public class FileLocator {
         return fileList;
     }
 
+    public static List<File> locateFiles(String rootDir, List<String> filesNames) {
+        List<File> fileList = new ArrayList<>(filesNames.size());
+        FileUtils.listFiles(new File(rootDir), null, true).
+                stream().
+                forEach((file) -> {
+                    String fileName = file.getName();
+                    if (filesNames.contains(fileName)) {
+                        fileList.add(filesNames.indexOf(fileName), file);
+                    }
+                });
+        return fileList;
+    }
 
-    
 }
