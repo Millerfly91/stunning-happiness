@@ -21,11 +21,11 @@ public class FileLocator {
 
     public static void main(String args[]) {
         List<String> testFileList = new ArrayList<>();
-        testFileList.add("test.txt");
+        testFileList.add("testData1.txt");
         testFileList.add("test3.txt");
         testFileList.add("ttt.txt");
 
-        new FileLocator().findAllFiles("C:\\TestDirectory\\", testFileList);
+        FileLocator.findAllFiles("C:\\Users\\Jacob\\", testFileList);
     }
 
     private FileLocator() {
@@ -57,7 +57,7 @@ public class FileLocator {
         return fileList;
     }
 
-    public static List<File> locateFiles(String rootDir, List<String> filesNames) {
+    public static List<File> locateFilesByFileName(String rootDir, List<String> filesNames) {
         List<File> fileList = new ArrayList<>(filesNames.size());
         FileUtils.listFiles(new File(rootDir), null, true).
                 stream().
