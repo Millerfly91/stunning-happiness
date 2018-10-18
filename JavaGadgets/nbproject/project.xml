@@ -12,7 +12,7 @@
             </test-roots>
         </data>
         <libraries xmlns="http://www.netbeans.org/ns/ant-project-libraries/1">
-            <definitions>C:\Users\Jacob\Documents\GitHub\crispy-parakeet\NetBeansProjects\lib\nblibraries.properties</definitions>
+            <definitions>../ThirdPartyLib\nblibraries.properties</definitions>
         </libraries>
     </configuration>
 </project>
