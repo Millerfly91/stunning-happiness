@@ -73,21 +73,17 @@ public class FileLocator {
                 });
         return fileList;
     }
-    
-    public void testCsvWrite(){
-        File csvFile = new FIle("C:\\")
-    }
-    
-    
-    
-    public void testCsvRead() throws FileNotFoundException, IOException{
-            FileReader fileReader = new FileReader("C:\\TestCsv.csv");
-            BufferedReader bufRead = new BufferedReader(fileReader);
-            
-            System.out.println("ReadLIne:   " + bufRead.readLine());
-            
-    }
-    
 
-    
+    public void testCsvWrite() {
+//        File csvFile = new FIle("C:\\")
+    }
+
+    public void testCsvRead() throws FileNotFoundException, IOException {
+        FileReader fileReader = new FileReader("C:\\TestCsv.csv");
+        BufferedReader bufRead = new BufferedReader(fileReader);
+
+        System.out.println("ReadLIne:   " + bufRead.readLine());
+
+    }
+
 }
