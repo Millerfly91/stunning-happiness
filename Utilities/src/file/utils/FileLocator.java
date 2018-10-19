@@ -61,7 +61,18 @@ public class FileLocator {
         return fileList;
     }
 
-    public static List<File> locateFilesByFileName(String rootDir, List<String> filesNames) {
+    /**
+     * Will return a list of File objects in the order of file names in
+     * fileNames parameter.
+     *
+     * @param rootDir   String of the directory path to begin the recursive 
+     *   search for files.
+     * @param filesNames List<String> of names of files to be located. 
+     * @return List<File> fileList of the file specified by filesNames.
+     */
+    public static List<File> locateFilesByFileName(
+            String rootDir,
+            List<String> filesNames) {
         List<File> fileList = new ArrayList<>(filesNames.size());
         FileUtils.listFiles(new File(rootDir), null, true).
                 stream().

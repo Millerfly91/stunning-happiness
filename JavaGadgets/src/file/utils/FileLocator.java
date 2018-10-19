@@ -8,7 +8,7 @@ package file.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileReader;  
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,11 +73,6 @@ public class FileLocator {
                 });
         return fileList;
     }
-    
-    public void testCsvWrite(){
-        File csvFile = new FIle("C:\\")
-    }
-    
     
     
     public void testCsvRead() throws FileNotFoundException, IOException{
