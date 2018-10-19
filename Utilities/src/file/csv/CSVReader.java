@@ -21,7 +21,7 @@ public class CSVReader {
         testRead();
     }
 
-    public static void testRead() throws FileNotFoundException, IOException {
+    public static List<String> testRead() throws FileNotFoundException, IOException {
         FileReader fileReader = new FileReader("C:\\James44\\mynuts.csv");
         BufferedReader br = new BufferedReader(fileReader);
 
@@ -34,6 +34,7 @@ public class CSVReader {
         }
 
         System.out.println(fileslist);
+        return fileslist;
 
     }
 }
