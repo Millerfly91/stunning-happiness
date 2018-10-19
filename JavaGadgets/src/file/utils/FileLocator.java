@@ -5,7 +5,11 @@
  */
 package file.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,4 +74,17 @@ public class FileLocator {
         return fileList;
     }
 
+    
+    
+    
+    public void testCsvRead() throws FileNotFoundException, IOException{
+            FileReader fileReader = new FileReader("C:\\TestCsv.csv");
+            BufferedReader bufRead = new BufferedReader(fileReader);
+            
+            System.out.println("ReadLIne:   " + bufRead.readLine());
+            
+    }
+    
+
+    
 }
