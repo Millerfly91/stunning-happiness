@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -29,12 +30,14 @@ public class FileLocator {
         testFileList.add("test3.txt");
         testFileList.add("ttt.txt");
 
-        FileLocator.findAllFiles("C:\\Users\\Jacob\\", testFileList);
+        List<File> files = FileLocator.locateFilesByFileName("C:\\TestDirectory\\", testFileList);
+        System.out.println(files);
     }
 
     private FileLocator() {
     }
 
+    @Deprecated
     public static List<File> findAllFiles(String rootDir, List<String> filesNames) {
 
         List<File> fileList = new ArrayList<>();
@@ -65,36 +68,24 @@ public class FileLocator {
      * Will return a list of File objects in the order of file names in
      * fileNames parameter.
      *
-     * @param rootDir   String of the directory path to begin the recursive 
-     *   search for files.
-     * @param filesNames List<String> of names of files to be located. 
-     * @return List<File> fileList of the file specified by filesNames.
+     * @param rootDir String of the directory path to begin the recursive search
+     * for files.
+     * @param filesNames {@link List<String>} of names of files to be located.
+     * @return {@link List<File>} fileList of the file specified by filesNames.
      */
     public static List<File> locateFilesByFileName(
             String rootDir,
             List<String> filesNames) {
-        List<File> fileList = new ArrayList<>(filesNames.size());
+        File[] files = new File[filesNames.size()];
         FileUtils.listFiles(new File(rootDir), null, true).
                 stream().
                 forEach((file) -> {
                     String fileName = file.getName();
                     if (filesNames.contains(fileName)) {
-                        fileList.add(filesNames.indexOf(fileName), file);
+                        files[filesNames.indexOf(fileName)] = file;
                     }
                 });
-        return fileList;
-    }
-
-    public void testCsvWrite() {
-//        File csvFile = new FIle("C:\\")
-    }
-
-    public void testCsvRead() throws FileNotFoundException, IOException {
-        FileReader fileReader = new FileReader("C:\\TestCsv.csv");
-        BufferedReader bufRead = new BufferedReader(fileReader);
-
-        System.out.println("ReadLIne:   " + bufRead.readLine());
-
+        return Arrays.asList(files);
     }
 
 }
