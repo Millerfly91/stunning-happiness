@@ -5,7 +5,9 @@
  */
 package file.csv;
 
+import file.utils.FileLocator;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,7 +20,9 @@ import java.util.List;
  */
 public class CSVReader {
      public static void main(String[] args) throws IOException {
-        testRead();
+        List<String> filesneeded = testRead();
+        FileLocator.findAllFiles("C:\\James44", filesneeded);
+        
     }
 
     public static List<String> testRead() throws FileNotFoundException, IOException {
@@ -37,4 +41,5 @@ public class CSVReader {
         return fileslist;
 
     }
+    
 }
