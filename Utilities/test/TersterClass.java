@@ -1,6 +1,7 @@
 
 import file.csv.CSVReader;
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 /*
@@ -15,13 +16,13 @@ import java.util.Scanner;
  */
 public class TersterClass {
     
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         Scanner getCSV = new Scanner(System.in);  // Reading from System.in
         System.out.println("Enter the location of the csv :");
         String CSVtosearch = getCSV.next();
-        File CSVlocation = new File(CSVtosearch);   
+        String CSVlocation = new String(CSVtosearch);   
         
-        CSVReader.CSVRead(CSVtosearch);
+        CSVReader.CSVRead(CSVlocation);
             
     }
         
