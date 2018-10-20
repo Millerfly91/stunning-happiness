@@ -20,12 +20,11 @@ import java.util.List;
  */
 public class CSVReader {
      public static void main(String[] args) throws IOException {
-        List<String> filesneeded = testRead();
-        FileLocator.locateFilesByFileName("C:\\James44", filesneeded);
-             
+        List<String> filesneeded = CSVRead();
+        FileLocator.locateFilesByFileName("C:\\James44", filesneeded);       
     }
 
-    public static List<String> testRead() throws FileNotFoundException, IOException {
+    public static List<String> CSVRead() throws FileNotFoundException, IOException {
         FileReader fileReader = new FileReader("C:\\James44\\mynuts.csv");
         BufferedReader br = new BufferedReader(fileReader);
 
