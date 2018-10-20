@@ -21,7 +21,8 @@ import java.util.List;
 public class CSVReader {
      public static void main(String[] args) throws IOException {
         List<String> filesneeded = CSVRead("C:\\James44\\mynuts.csv");
-        FileLocator.locateFilesByFileName("C:\\James44", filesneeded);       
+//        FileLocator.locateFilesByFileName("C:\\James44", filesneeded);  
+         System.out.println(filesneeded);
     }
 
     public static List<String> CSVRead(String filelocation) throws FileNotFoundException, IOException {

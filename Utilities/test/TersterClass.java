@@ -1,7 +1,9 @@
 
 import file.csv.CSVReader;
+import file.utils.FileLocator;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -23,7 +25,9 @@ public class TersterClass {
         String CSVlocation = new String(CSVtosearch);   
         
         CSVReader.CSVRead(CSVlocation);
-            
+        List<String> filesneeded = CSVReader.main(args);
+        System.out.println(filesneeded);
+        FileLocator.locateFilesByFileName("C:\\James44", filesneeded);
     }
         
     
