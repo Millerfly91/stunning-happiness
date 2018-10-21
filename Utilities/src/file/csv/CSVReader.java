@@ -20,9 +20,9 @@ import java.util.List;
  */
 public class CSVReader {
      public static void main(String[] args) throws IOException {
-        List<String> filesneeded = CSVRead("C:\\James44\\mynuts.csv");
+        List<String> filesneeded = CSVRead(null);
 //        FileLocator.locateFilesByFileName("C:\\James44", filesneeded);  
-         System.out.println(filesneeded);
+//         System.out.println(filesneeded);
     }
 
     public static List<String> CSVRead(String filelocation) throws FileNotFoundException, IOException {
@@ -37,7 +37,7 @@ public class CSVReader {
             fileslist.add(line);
         }
 
-        System.out.println(fileslist);
+//        System.out.println(fileslist);
         return fileslist;
 
     }
