@@ -18,12 +18,9 @@ import java.util.Scanner;
 public class FileRelocator {
     public static void main(String args[]) throws IOException {
         Scanner getinput = new Scanner(System.in);  // Reading from System.in
-        System.out.println("Enter the location you want to search : ");
-        String searchlocation = getinput.next();
-        System.out.println("Enter the location of the csv containing the files you are searching for : ");
-        String CSVtosearch = getinput.next();
-        System.out.println("Enter the destination for the files : ");
-        String filedest = getinput.next();
+        String searchlocation = getStringFromUser("Enter the location you want to search : ");
+        String CSVtosearch = getStringFromUser("Enter the location of the csv containing the files you are searching for : ");
+        String filedest = getStringFromUser("Enter the destination for the files : ");
         File dest = new File(filedest);
         
         List<String> filesneeded = CSVReader.CSVRead(CSVtosearch);
@@ -34,5 +31,11 @@ public class FileRelocator {
                 FileMover.copyFiles(temp, dest);
             }
 	}
+        
     }     
+    public static String getStringFromUser(String question){
+        Scanner scanIn = new Scanner(System.in);
+        System.out.println(question);
+        return scanIn.next();
+    }
 }
