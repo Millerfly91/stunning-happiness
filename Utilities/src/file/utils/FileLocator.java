@@ -5,17 +5,18 @@
  */
 package file.utils;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -25,6 +26,13 @@ import org.apache.commons.io.FileUtils;
 public class FileLocator {
 
     public static void main(String args[]) {
+        try {
+            java.nio.file.Files.walk(Paths.get("C:\\Users\\Jacob\\"), FileVisitOption.FOLLOW_LINKS).filter((path) -> {
+
+                return true;
+            });
+        } catch (IOException ex) {
+        }
         List<String> testFileList = new ArrayList<>();
         testFileList.add("testData1.txt");
         testFileList.add("test3.txt");
@@ -68,9 +76,9 @@ public class FileLocator {
      * Will return a list of File objects in the order of file names in
      * fileNames parameter.
      *
-     * @param rootDir String of the directory path to begin the recursive search
-     * for files.
-     * @param filesNames {@link List<String>} of names of files to be located.
+     * @param rootDir {@link String} of the directory path to begin the
+     * recursive search for files.
+     * @param filesNames {@link List<String>} of file names to be located.
      * @return {@link List<File>} fileList of the file specified by filesNames.
      */
     public static List<File> locateFilesByFileName(
