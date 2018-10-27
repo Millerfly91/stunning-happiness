@@ -7,7 +7,7 @@ package file.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +15,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -25,21 +23,25 @@ import org.apache.commons.io.FileUtils;
  */
 public class FileLocator {
 
-    public static void main(String args[]) {
-        try {
-            java.nio.file.Files.walk(Paths.get("C:\\Users\\Jacob\\"), FileVisitOption.FOLLOW_LINKS).filter((path) -> {
+    public static void main(String args[]) throws Exception {
+        testMEthod();
+    }
 
-                return true;
-            });
-        } catch (IOException ex) {
-        }
+    public static void testMEthod() throws Exception {
         List<String> testFileList = new ArrayList<>();
         testFileList.add("testData1.txt");
         testFileList.add("test3.txt");
         testFileList.add("ttt.txt");
 
-        List<File> files = FileLocator.locateFilesByFileName("C:\\TestDirectory\\", testFileList);
-        System.out.println(files);
+        String root = "C:\\TestDirectory\\";
+        List<File> testFiles = null;
+        try {
+            testFiles = locateFilesByFileName(root, testFileList);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new Exception("TEST");
+        }
+        System.out.println(testFiles);
     }
 
     private FileLocator() {
@@ -83,14 +85,16 @@ public class FileLocator {
      */
     public static List<File> locateFilesByFileName(
             String rootDir,
-            List<String> filesNames) {
+            List<String> filesNames) throws IOException {
+
         File[] files = new File[filesNames.size()];
-        FileUtils.listFiles(new File(rootDir), null, true).
-                stream().
-                forEach((file) -> {
-                    String fileName = file.getName();
-                    if (filesNames.contains(fileName)) {
-                        files[filesNames.indexOf(fileName)] = file;
+        java.nio.file.Files.
+                walk(Paths.get("C:\\TestDirectory\\")).
+                filter(Files::isRegularFile).
+                forEach((path) -> {
+                    int index = filesNames.indexOf(path.getFileName().toString());
+                    if (index > 0) {
+                        files[index] = path.toFile();
                     }
                 });
         return Arrays.asList(files);
