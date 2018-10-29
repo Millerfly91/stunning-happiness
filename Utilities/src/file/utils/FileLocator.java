@@ -89,7 +89,7 @@ public class FileLocator {
 
         File[] files = new File[filesNames.size()];
         java.nio.file.Files.
-                walk(Paths.get("C:\\TestDirectory\\")).
+                walk(Paths.get(rootDir)).
                 filter(Files::isRegularFile).
                 forEach((path) -> {
                     int index = filesNames.indexOf(path.getFileName().toString());
