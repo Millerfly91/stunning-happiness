@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 public class FileRelocator {
     public static void main(String args[]) throws IOException {
-        Scanner getinput = new Scanner(System.in);  // Reading from System.in
+        //Scanner getinput = new Scanner(System.in);  // Reading from System.in
         String searchlocation = getStringFromUser("Enter the location you want to search : ");
         String CSVtosearch = getStringFromUser("Enter the location of the csv containing the files you are searching for : ");
         String filedest = getStringFromUser("Enter the destination for the files : ");

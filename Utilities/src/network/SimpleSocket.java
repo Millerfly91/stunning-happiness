@@ -16,7 +16,7 @@ import java.net.Socket;
  */
 public class SimpleSocket {
 
-    private String 
+//    private String 
     
     public static void main(String argv[]) throws Exception {
         String sentence;

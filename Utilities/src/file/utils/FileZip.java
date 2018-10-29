@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.zip.ZipEntry;
@@ -22,8 +23,11 @@ import java.util.zip.ZipOutputStream;
  */
 public class FileZip {
 
-    public static void main(String args[]) {
-
+    public static void main(String args[]) throws IOException {
+//        Path paths = Paths.get("C:\\James44");
+//        Path zip = Paths.get("C:\\James46.zip");
+//        pack(null, null);
+          zipFile(null);
     }
 
     public static File zipFile(File filetozip) {
