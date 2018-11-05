@@ -45,24 +45,21 @@
     <div class="col-md-4">
       <div class="thumbnail">
         <a href="Pics/pic1.jpg" target="_blank">
-          <img src="Pics/pic1.jpg" alt="Lights" style="width:50%">
+          <img src="Pics/pic1.jpg" alt="Lights" style="width:75%">
           <div class="caption">
             <p>Lorem ipsum donec id elit non mi porta gravida at eget metus.</p>
           </div>
         </a>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-2">
       <div class="thumbnail">
-        <a href="/pics/nature.jpg" target="_blank">
-        <!--<a href="/w3images/nature.jpg" target="_blank">-->
-          <img src="/w3images/nature.jpg" alt="Nature" style="width:100%">
-          <div class="caption">
-            <p>Lorem ipsum donec id elit non mi porta gravida at eget metus.</p>
+        <iframe scrolling="no" frameborder="no" clocktype="html5" 
+                style="overflow:hidden;border:0;margin:0;padding:0;width:120px;height:40px;"
+            src="https://www.clocklink.com/html5embed.php?clock=043&timezone=EST&color=red&size=120&Title=&Message=&Target=&From=2018,1,1,0,0,0&Color=red">
+        </iframe>
           </div>
-        </a>
       </div>
-    </div>
     <div class="col-md-4">
       <div class="thumbnail">
         <a href="/w3images/fjords.jpg" target="_blank">
