@@ -6,12 +6,9 @@
 package network;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -39,17 +36,18 @@ public class NetworkClient {
 
     public static void testMethod() {
         NetworkClient testInstance = new NetworkClient();
-        testInstance.connect("localhost", "6789");
-        testInstance.transmitStream("TESTESTEST");
+        testInstance.connect("localhost", "1109");
+        testInstance.transmitStream("penis");
     }
 
     public String transmitStream(String out) {
         String response = null;
-        try (DataOutputStream dataOut
-                = new DataOutputStream(currentSocket.getOutputStream());
+        try (PrintWriter dataOut
+                = new PrintWriter(currentSocket.getOutputStream());
                 BufferedReader dataIn
                 = new BufferedReader(new InputStreamReader(currentSocket.getInputStream()))) {
-            dataOut.writeChars(out);
+            dataOut.println(out);
+            dataOut.flush();
             response = dataIn.readLine();
             System.out.println("Local Port for client: " + currentSocket.getLocalPort());
             System.out.println("Remote \"SocketAddress\": " + currentSocket.getRemoteSocketAddress().toString());

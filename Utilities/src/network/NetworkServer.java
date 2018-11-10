@@ -28,14 +28,21 @@ public class NetworkServer {
     BlockingQueue<Runnable> runQueue;
     ThreadPoolExecutor tpe;
 
+    public static void main(String[] argv) {
+        NetworkServer testServer = new NetworkServer();
+        testServer.listen(1109);
+    }
+
     public NetworkServer() {
-        this.tpe = new ThreadPoolExecutor(0, 3, 10, TimeUnit.MINUTES, runQueue);
         this.runQueue = new LinkedBlockingQueue<>();
+        this.tpe = new ThreadPoolExecutor(0, 3, 10, TimeUnit.MINUTES, runQueue);
     }
 
     public void listen(int port) {
         try {
             sockServ = new ServerSocket(port);
+            startNextWorker();
+            System.out.println("Listening on port " + port);
         } catch (IOException ex) {
             Logger.getLogger(NetworkServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -53,7 +60,9 @@ public class NetworkServer {
 
     protected void startNextWorker() {
         ClientWorker cw = new ClientWorker();
-        runQueue.add(cw);
+//        runQueue.add(cw);
+        tpe.execute(cw);
+        
     }
 
     protected Socket getSocketAndProcess() throws IOException {
@@ -69,9 +78,11 @@ public class NetworkServer {
         @Override
         public void run() {
             try {
+                System.out.println("Starting up client handler.");
                 Socket sock = getSocketAndProcess();
                 startNextWorker();
                 String recievedData = processConnection(sock);
+                System.out.println("Recieved from client: " + recievedData);
                 writeDataOut(sock, recievedData.toUpperCase());
 
             } catch (Throwable ex) {
@@ -86,6 +97,7 @@ public class NetworkServer {
 
         protected void writeDataOut(Socket sock, String otuput) throws IOException {
             dataOut = new PrintWriter(sock.getOutputStream(), true);
+            dataOut.println(otuput);
         }
 
     }
