@@ -36,8 +36,8 @@ public class NetworkClient {
 
     public static void testMethod() {
         NetworkClient testInstance = new NetworkClient();
-        testInstance.connect("localhost", "1109");
-        testInstance.transmitStream("penis");
+        testInstance.connect("192.168.1.10", "1109");
+        testInstance.transmitStream("What up Ernie?");
     }
 
     public String transmitStream(String out) {
@@ -53,6 +53,7 @@ public class NetworkClient {
             System.out.println("Remote \"SocketAddress\": " + currentSocket.getRemoteSocketAddress().toString());
             System.out.println("Remote Response: " + response);
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         return response;
     }
