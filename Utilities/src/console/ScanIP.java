@@ -17,10 +17,14 @@ import java.util.List;
  */
 public class ScanIP {
 
-    public static void main(String[] argv) throws IOException {
-        executeCommandLine("arp -a > C:\\testical.txt && exit");
-
+    public static void main(String[] argv) throws IOException, InterruptedException {
         File outputFile = new File("C:\\testical.txt");
+        outputFile.createNewFile();
+        executeCommandLine("arp -a > C:\\testical.txt && exit");
+        
+        Thread.sleep(500);
+        
+        
         FileReader(outputFile).forEach((line) -> {
             line = line.trim();
 
