@@ -14,8 +14,7 @@ import java.util.List;
  *
  * @author James
  */
-public class runCommand {
-
+public class ConsoleCommand {
     public static void main(String[] argv) throws IOException, InterruptedException {
         List<String> results = runCommand("ipconfig");
 
@@ -62,5 +61,4 @@ public class runCommand {
         }
         return "";
     }
-
 }
