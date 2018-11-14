@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package console;
+
 
 import java.io.File;
 import java.io.FileReader;
@@ -15,16 +10,13 @@ import java.util.List;
  *
  * @author James
  */
-public class ScanIP {
-
+public class IPConfig {
+ 
     public static void main(String[] argv) throws IOException, InterruptedException {
         File outputFile = new File("C:\\testical.txt");
         outputFile.createNewFile();
-        executeCommandLine("arp -a > C:\\testical.txt && exit");
-        
-        Thread.sleep(500);
-        
-        
+        executeCommandLine("ipconfig > C:\\testical.txt && exit");
+   
         FileReader(outputFile).forEach((line) -> {
             line = line.trim();
 
@@ -46,7 +38,6 @@ public class ScanIP {
     }
 
     protected static String executeCommandLine(String command) {
-
         try {
             // Just one line and you are done !  
             // We have given a command to start cmd 
@@ -65,3 +56,5 @@ public class ScanIP {
     }
 
 }
+
+
