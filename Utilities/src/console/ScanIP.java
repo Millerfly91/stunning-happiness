@@ -15,26 +15,30 @@ import java.util.List;
  *
  * @author James
  */
+
 public class ScanIP {
 
     public static void main(String[] argv) throws IOException, InterruptedException {
+        runCommand("arp -a");
+    }
+
+    public static List runCommand(String command) throws IOException {
         File outputFile = new File("C:\\testical.txt");
         outputFile.createNewFile();
-        executeCommandLine("arp -a > C:\\testical.txt && exit");
+        executeCommandLine(command + " > C:\\testical.txt && exit");        
         
-        Thread.sleep(500);
-        
-        
-        FileReader(outputFile).forEach((line) -> {
+        List<String> fileLines = FileReader(outputFile);
+        fileLines.forEach((line) -> {
             line = line.trim();
 
             if (line.length() > 3 && isNumeric(line.substring(0, 3))) {
 //                System.out.println(line);
-                System.out.println(line.split(" ")[0].trim());
+        System.out.println(line.split(" ")[0].trim());
             }
 
         });
         outputFile.delete();
+        return fileLines;
     }
 
     public static boolean isNumeric(String s) {
