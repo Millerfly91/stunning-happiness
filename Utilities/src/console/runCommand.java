@@ -6,7 +6,6 @@
 package console;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -15,11 +14,10 @@ import java.util.List;
  *
  * @author James
  */
-public class ScanIP {
-
+public class runCommand {
     public static void main(String[] argv) throws IOException, InterruptedException {
-        List<String> results = runCommand("arp -a");
-        System.out.println(results);
+        List<String> results = runCommand("ipconfig");
+//        System.out.println(results);
 
         for (String line : results) {
             System.out.println(line);
@@ -62,7 +60,6 @@ public class ScanIP {
             System.out.println("HEY Buddy ! U r Doing Something Wrong ");
             e.printStackTrace();
         }
-
         return "";
     }
 
