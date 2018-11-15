@@ -28,11 +28,15 @@ public class ConsoleCommand {
     public static List runCommand(String command) throws IOException {
         File outputFile = new File("C:\\Users\\James\\Documents\\NetBeansProjects\\testical.txt");
         outputFile.createNewFile();
-        executeCommandLine(command + " > " + outputFile.getAbsolutePath() + " && exit");
+        executeCommandLine(command + " > " + outputFile.getAbsolutePath() 
+                + "&& icacls " + outputFile.getAbsolutePath()+" /grant \"domain\\user\":(OI)(CI)M"
+                + "&& icacls " + outputFile.getAbsolutePath()+" /grant \"everyone\":(OI)(CI)M"
+                + "&& icacls " + outputFile.getAbsolutePath()+" /grant \"AuthenticatedUsers\":(OI)(CI)M"
+                + "&& exit");
 
         List<String> fileLines = FileReader(outputFile);
-
-        executeCommandLine("del " + outputFile + " && exit");
+        outputFile.delete();
+        executeCommandLine("del " + outputFile.getAbsolutePath() + " && exit");
         return fileLines;
     }
 
