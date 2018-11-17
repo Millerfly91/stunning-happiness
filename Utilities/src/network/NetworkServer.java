@@ -27,23 +27,21 @@ public class NetworkServer {
     ServerSocket sockServ;
     BlockingQueue<Runnable> runQueue;
     ThreadPoolExecutor threadExecutor;
-    ConnectionAcction connectionAction;
+    ConnectionAction connectionAction;
 
     public static void main(String[] argv) {
-        NetworkServer testServer = new NetworkServer();
-        testServer.setAction(conn -> {
+        ConnectionAction testAction = conn -> {
             try {
                 String recievedData = conn.readString();
                 System.out.println(recievedData);
                 conn.sendString("TEST Out. Recieved = " + recievedData);
-
-//                String recievedData = processConnection(sock);
-//                System.out.println("Recieved from client: " + recievedData);
-//                writeDataOut(sock, recievedData.toUpperCase());
             } catch (Throwable t) {
                 t.printStackTrace();
             }
-        });
+        };
+
+        NetworkServer testServer = new NetworkServer();
+        testServer.setAction(testAction);
         testServer.listen(1109);
     }
 
@@ -52,7 +50,7 @@ public class NetworkServer {
         this.threadExecutor = new ThreadPoolExecutor(0, 3, 10, TimeUnit.MINUTES, runQueue);
     }
 
-    public NetworkServer setAction(ConnectionAcction connectionAction) {
+    public NetworkServer setAction(ConnectionAction connectionAction) {
         this.connectionAction = connectionAction;
         return this;
     }
@@ -86,10 +84,10 @@ public class NetworkServer {
 
     }
 
-    public void shutdown(){
+    public void shutdown() {
         threadExecutor.shutdownNow();
     }
-    
+
     protected Socket blockForNextConnection() throws IOException {
         Socket ttt = sockServ.accept();
         return ttt;
@@ -99,7 +97,7 @@ public class NetworkServer {
 
         BufferedReader dataIn;
         PrintWriter dataOut;
-        ConnectionAcction action;
+        ConnectionAction action;
 //                = (sock) -> {
 //            try {
 //                String recievedData = processConnection(sock);
@@ -110,7 +108,7 @@ public class NetworkServer {
 //            }
 //        };
 
-        public ServerTask(ConnectionAcction action) {
+        public ServerTask(ConnectionAction action) {
             this.action = action;
         }
 
@@ -148,7 +146,7 @@ public class NetworkServer {
     }
 
     @FunctionalInterface
-    public interface ConnectionAcction {
+    public interface ConnectionAction {
 
         public abstract void action(Connection conn);
     }
