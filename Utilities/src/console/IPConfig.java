@@ -40,7 +40,7 @@ public class IPConfig {
     protected static String executeCommandLine(String command) {
         try {
             // Just one line and you are done !  
-            // We have given a command to start cmd 
+            // We have given a command to start cmd  
             // /K : Carries out command specified by string 
             Runtime.getRuntime().exec("cmd  /K \"powershell -Command "
                     + "\"Start-Process 'cmd.exe' -Verb runAs -ArgumentList \"\"/k " + command + "\"\"\""

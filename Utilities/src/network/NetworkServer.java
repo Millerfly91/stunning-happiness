@@ -27,11 +27,24 @@ public class NetworkServer {
     ServerSocket sockServ;
     BlockingQueue<Runnable> runQueue;
     ThreadPoolExecutor threadExecutor;
-    ConnectionAction connectionAction;
+    ConnectionAcction connectionAction;
 
     public static void main(String[] argv) {
- //        NetworkServer testServer = new NetworkServer();
-//        testServer.listen(1109);
+        NetworkServer testServer = new NetworkServer();
+        testServer.setAction(conn -> {
+            try {
+                String recievedData = conn.readString();
+                System.out.println(recievedData);
+                conn.sendString("TEST Out. Recieved = " + recievedData);
+
+//                String recievedData = processConnection(sock);
+//                System.out.println("Recieved from client: " + recievedData);
+//                writeDataOut(sock, recievedData.toUpperCase());
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        });
+        testServer.listen(1109);
     }
 
     public NetworkServer() {
@@ -39,7 +52,7 @@ public class NetworkServer {
         this.threadExecutor = new ThreadPoolExecutor(0, 3, 10, TimeUnit.MINUTES, runQueue);
     }
 
-    public NetworkServer setAction(ConnectionAction connectionAction) {
+    public NetworkServer setAction(ConnectionAcction connectionAction) {
         this.connectionAction = connectionAction;
         return this;
     }
@@ -47,7 +60,7 @@ public class NetworkServer {
     public void listen(int port) {
         try {
             sockServ = new ServerSocket(port);
-            startNextWorker();
+            setNextWorker();
             System.out.println("Listening on port " + port);
         } catch (IOException ex) {
             Logger.getLogger(NetworkServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,23 +77,29 @@ public class NetworkServer {
         }
     }
 
-    protected void startNextWorker() {
-        ClientWorker cw = new ClientWorker(connectionAction);
-//        runQueue.add(cw);
+    private int connCount = 0;
+
+    protected void setNextWorker() {
+        ServerTask cw = new ServerTask(connectionAction);
+        System.out.println("Starting a new task to wait for next connection. Total: " + connCount++);
         threadExecutor.execute(cw);
 
     }
 
-    protected Socket getSocketAndProcess() throws IOException {
+    public void shutdown(){
+        threadExecutor.shutdownNow();
+    }
+    
+    protected Socket blockForNextConnection() throws IOException {
         Socket sock = sockServ.accept();
         return sock;
     }
 
-    public class ClientWorker implements Runnable {
+    public class ServerTask implements Runnable {
 
         BufferedReader dataIn;
         PrintWriter dataOut;
-        ConnectionAction action;
+        ConnectionAcction action;
 //                = (sock) -> {
 //            try {
 //                String recievedData = processConnection(sock);
@@ -91,7 +110,7 @@ public class NetworkServer {
 //            }
 //        };
 
-        public ClientWorker(ConnectionAction action) {
+        public ServerTask(ConnectionAcction action) {
             this.action = action;
         }
 
@@ -99,11 +118,12 @@ public class NetworkServer {
         public void run() {
             try {
                 System.out.println("Starting up client handler.");
-                Socket sock = getSocketAndProcess();
-                startNextWorker();
+                Socket sock = blockForNextConnection();
+                setNextWorker();
 
                 long timeToProcess = System.currentTimeMillis();
-                action.handleNewConnection(sock);
+                HttpConnection newHttpConn = new HttpConnection(sock);
+                action.action(newHttpConn);
                 timeToProcess = System.currentTimeMillis() - timeToProcess;
                 System.out.println("Time to process connection: " + timeToProcess + " ms");
             } catch (Throwable ex) {
@@ -112,7 +132,7 @@ public class NetworkServer {
             }
         }
 
-        protected String processConnection(Socket sock)
+        protected String readStringIn(Socket sock)
                 throws IOException {
             dataIn = new BufferedReader(
                     new InputStreamReader(sock.getInputStream()));
@@ -122,34 +142,15 @@ public class NetworkServer {
         protected void writeDataOut(Socket sock, String otuput)
                 throws IOException {
             dataOut = new PrintWriter(sock.getOutputStream(), true);
-            dataOut.println(otuput);    
+            dataOut.println(otuput);
         }
 
-    }
-
-    protected String executeCommandLine(String command) {
-
-        try {
-            // Just one line and you are done !  
-            // We have given a command to start cmd 
-            // /K : Carries out command specified by string 
-            Runtime.getRuntime().exec("cmd  /K \"powershell -Command "
-                    + "\"Start-Process 'cmd.exe' -Verb runAs -ArgumentList \"\"/k " + command+"\"\"\""
-                    + "\"");
-//            Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
-
-        } catch (Exception e) {
-            System.out.println("HEY Buddy ! U r Doing Something Wrong ");
-            e.printStackTrace();
-        }
-
-        return "";
     }
 
     @FunctionalInterface
-    public interface ConnectionAction {
+    public interface ConnectionAcction {
 
-        public abstract void handleNewConnection(Socket sock);
+        public abstract void action(Connection conn);
     }
 
 }

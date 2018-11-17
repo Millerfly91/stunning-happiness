@@ -26,8 +26,8 @@ public class ConsoleCommand {
     }
 
     public static List runCommand(String command) throws IOException {
-        File outputFile = new File("C:\\Users\\James\\Documents\\NetBeansProjects\\testical.txt");
-        outputFile.createNewFile();
+        File outputFile = new File("C:\\Users\\Jacob\\testical.txt");
+
         executeCommandLine(command + " > " + outputFile.getAbsolutePath() + " && exit");
 
         List<String> fileLines = FileReader(outputFile);
