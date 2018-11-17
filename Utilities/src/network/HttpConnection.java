@@ -61,7 +61,7 @@ public class HttpConnection implements Connection {
     }
 
     @Override
-    public String readString() {
+    public String readAsString() {
         try {
             BufferedReader dataIn = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));

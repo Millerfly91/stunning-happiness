@@ -32,7 +32,7 @@ public class NetworkServer {
     public static void main(String[] argv) {
         ConnectionAction testAction = conn -> {
             try {
-                String recievedData = conn.readString();
+                String recievedData = conn.readAsString();
                 System.out.println(recievedData);
                 conn.sendString("TEST Out. Recieved = " + recievedData);
             } catch (Throwable t) {

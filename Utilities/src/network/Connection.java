@@ -18,7 +18,7 @@ public interface Connection {
 
     public InputStream getInputStream();
 
-    public String readString();
+    public String readAsString();
 
     public void sendString(String message);
 }
