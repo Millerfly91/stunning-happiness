@@ -91,8 +91,8 @@ public class NetworkServer {
     }
     
     protected Socket blockForNextConnection() throws IOException {
-        Socket sock = sockServ.accept();
-        return sock;
+        Socket ttt = sockServ.accept();
+        return ttt;
     }
 
     public class ServerTask implements Runnable {
