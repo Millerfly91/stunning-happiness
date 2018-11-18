@@ -5,6 +5,7 @@
  */
 package console;
 
+import static console.ConsoleCommand.FileReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,52 +19,28 @@ import java.util.List;
 public class ScanIP {
 
     public static void main(String[] argv) throws IOException, InterruptedException {
-        List<String> results = runCommand("arp -a");
-        System.out.println(results);
-
-        for (String line : results) {
-            System.out.println(line);
-        }
-//        another option
-//        results.forEach(System.out::println);
-    }
-
-    public static List runCommand(String command) throws IOException {
-        File outputFile = new File("C:\\Users\\James\\Documents\\NetBeansProjects\\testical.txt");
+       File outputFile = new File("C:\\testical.txt");
         outputFile.createNewFile();
-        executeCommandLine(command + " > " + outputFile.getAbsolutePath() + " && exit");
-
-        List<String> fileLines = FileReader(outputFile);
-        
-        executeCommandLine("del " + outputFile + " && exit");
-        return fileLines;
+        List<String> results = ConsoleCommand.runCommand("arp -a");
+//        List<String> IPs = new; 
+        separateIPs(results);
     }
-
+    
+    public static List<String> separateIPs(List<String> results) throws IOException{
+//        List<String> fileLines = FileReader(results);
+        
+        for (String line : results) {
+            if (line.length() > 1 && isNumeric(line.trim().substring(0, 1))){
+                String[] IP = line.trim().split(" ");
+                System.out.println(IP[0]);
+            }
+            
+        }
+        return results;
+    }
+    
     public static boolean isNumeric(String s) {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
-
-    static List<String> FileReader(File file) throws IOException {
-        return Files.readAllLines(file.toPath());
-    }
-
-    protected static String executeCommandLine(String command) {
-
-        try {
-            // Just one line and you are done !  
-            // We have given a command to start cmd 
-            // /K : Carries out command specified by string 
-            Runtime.getRuntime().exec("cmd  /K \"powershell -Command "
-                    + "\"Start-Process 'cmd.exe' -Verb runAs -ArgumentList \"\"/k " + command + "\"\"\""
-                    + "\"");
-//            Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
-
-        } catch (Exception e) {
-            System.out.println("HEY Buddy ! U r Doing Something Wrong ");
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-
+    
 }

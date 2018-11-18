@@ -31,11 +31,12 @@ public class ConsoleCommand {
         List<String> fileLines = FileReader(outputFile);
 
         executeCommandLine("del " + outputFile + " && exit");
-        List<String> results = runCommand("ipconfig");
-        for (String line : results) {
-            System.out.println(line);
-        }
-        System.out.println(fileLines);
+        
+//        ---------   to print in this  -------------
+//        for (String line : fileLines) {
+//            System.out.println(line);
+//        }
+
         return fileLines;
     }
 
