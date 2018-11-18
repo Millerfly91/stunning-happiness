@@ -16,23 +16,26 @@ import java.util.List;
  */
 public class ConsoleCommand {
     public static void main(String[] argv) throws IOException, InterruptedException {
-        List<String> results = runCommand("ipconfig");
+        
 
-        for (String line : results) {
-            System.out.println(line);
-        }
+        
 //        another option
 //        results.forEach(System.out::println);
     }
 
     public static List runCommand(String command) throws IOException {
-        File outputFile = new File("C:\\Users\\Jacob\\testical.txt");
+        File outputFile = new File("C:\\Users\\James\\testical.txt");
 
         executeCommandLine(command + " > " + outputFile.getAbsolutePath() + " && exit");
 
         List<String> fileLines = FileReader(outputFile);
 
         executeCommandLine("del " + outputFile + " && exit");
+        List<String> results = runCommand("ipconfig");
+        for (String line : results) {
+            System.out.println(line);
+        }
+        System.out.println(fileLines);
         return fileLines;
     }
 

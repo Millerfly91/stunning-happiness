@@ -17,11 +17,7 @@ import java.util.List;
 public class runCommand {
 
     public static void main(String[] argv) throws IOException, InterruptedException {
-        List<String> results = runCommand("ipconfig");
-
-        for (String line : results) {
-            System.out.println(line);
-        }
+        
 //        another option
 //        results.forEach(System.out::println);
     }
@@ -34,6 +30,11 @@ public class runCommand {
         List<String> fileLines = FileReader(outputFile);
 
         executeCommandLine("del " + outputFile + " && exit");
+//        List<String> results = runCommand("ipconfig");
+
+        for (String line : fileLines) {
+            System.out.println(line);
+        }
         return fileLines;
     }
 
