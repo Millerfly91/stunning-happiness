@@ -5,11 +5,8 @@
  */
 package console;
 
-import static console.ConsoleCommand.FileReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,25 +15,37 @@ import java.util.List;
  */
 public class ScanIP {
 
+    private static String[] IP;
+    //String[] IP = null;
+
     public static void main(String[] argv) throws IOException, InterruptedException {
-        List<String> results = ConsoleCommand.runCommand("nmap -sn 192.168.1.0/24 -vv");
-        System.out.println(results);
 //        List<String> results = ConsoleCommand.runCommand("arp -a");
-//        List<String> IPs = new; 
-        separateIPs(results);
+////        System.out.println(results);
+////        List<String> results = ConsoleCommand.runCommand("arp -a");
+////        List<String> IPs = new; 
+//        List<String> IPList = separateIPs(results);
+        System.out.println(getActiveIPs());
     }
     
-    public static List<String> separateIPs(List<String> results) throws IOException{
+    public static List getActiveIPs() throws IOException{
+        List<String> results = ConsoleCommand.runCommand("arp -a");
+        List<String> IPList = separateIPs(results);
+        return IPList;
+    }
+    
+    public static List separateIPs(List<String> results) throws IOException{
 //        List<String> fileLines = FileReader(results);
+        List<String> IPList = new ArrayList<>();
         
         for (String line : results) {
             if (line.length() > 1 && isNumeric(line.trim().substring(0, 1))){
-                String[] IP = line.trim().split(" ");
-                System.out.println(IP[0]);
+                IP = line.trim().split(" ");
+//                System.out.println(IP[0]);
+                IPList.add(IP[0]);
             }
             
         }
-        return results;
+        return IPList;
     }
     
     public static boolean isNumeric(String s) {
