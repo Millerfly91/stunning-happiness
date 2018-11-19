@@ -22,7 +22,7 @@ public class TBD {
     String keyword = "BERT";
     NetworkServer server;
     List validatedClients;
-    String message;
+    String message = "Hello Ernie!";
 
     public static void main(String[] argv) throws IOException {
         TBD startserv = new TBD();
@@ -75,7 +75,7 @@ public class TBD {
         TBD searchServ = new TBD();
 
         for (String line : IPList) {
-            searchServ.connectClient(line, keyword);
+            searchServ.connectClient(line, keyword + message);
         }
     }
 
