@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package network;
+package network.tcp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,9 +15,10 @@ import java.net.Socket;
  *
  * @author Jacob
  */
-public class NetworkClient {
+public class TcpClient {
 
     private Socket currentSocket;
+    private TcpConnection conn;
 
     public static void main(String argv[]) throws Exception {
         testMethod();
@@ -25,7 +26,7 @@ public class NetworkClient {
 
     public static void testMethod() {
         for (int i = 0; i < 4; i++) {
-            NetworkClient testInstance = new NetworkClient();
+            TcpClient testInstance = new TcpClient();
             testInstance.connect("192.168.1.10", "1109");
             testInstance.transmitStream("What up Ernie?");
         }
@@ -51,10 +52,10 @@ public class NetworkClient {
 
     public void connect(String destIp, String port) {
         try {
-            Socket clientSocket = new Socket(destIp, Integer.parseInt(port));
-            this.currentSocket = clientSocket;
+            this.conn = new TcpConnection(new Socket(destIp, Integer.parseInt(port)));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
+
 }

@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,10 +26,18 @@ public class ConsoleCommand {
     }
 
     public static List runCommand(String command) throws IOException {
-        File outputFile = new File("C:\\Users\\James\\testical.txt");
-
+        File outputFile = new File("C:\\jakeTempFIle.txt");
+        if(outputFile.exists()!= true){
+            outputFile.createNewFile();
+        }
         executeCommandLine(command + " > " + outputFile.getAbsolutePath() + " && exit");
 
+        try {
+            Thread.sleep(10*1000);
+        } catch (Throwable ex) {
+            Logger.getLogger(ConsoleCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         List<String> fileLines = FileReader(outputFile);
 
         executeCommandLine("del " + outputFile + " && exit");

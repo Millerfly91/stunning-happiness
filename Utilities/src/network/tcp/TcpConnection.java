@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package network;
+package network.tcp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,16 +14,17 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.connection.Connection;
 
 /**
  *
  * @author Jacob
  */
-public class HttpConnection implements Connection {
+public class TcpConnection implements Connection {
 
     private final Socket socket;
 
-    public HttpConnection(final Socket socket) {
+    public TcpConnection(final Socket socket) {
         this.socket = socket;
     }
 
@@ -33,7 +34,7 @@ public class HttpConnection implements Connection {
             PrintWriter dataOut = new PrintWriter(socket.getOutputStream(), true);
             dataOut.println(message);
         } catch (IOException ex) {
-            Logger.getLogger(HttpConnection.class.getName()).
+            Logger.getLogger(TcpConnection.class.getName()).
                     log(Level.SEVERE, "Failed to send string " + message, ex);
         }
     }
@@ -43,7 +44,7 @@ public class HttpConnection implements Connection {
         try {
             return socket.getOutputStream();
         } catch (IOException ex) {
-            Logger.getLogger(HttpConnection.class.getName()).
+            Logger.getLogger(TcpConnection.class.getName()).
                     log(Level.SEVERE, "Failed to get OutputStream from Socket object.", ex);
             return null;
         }
@@ -54,7 +55,7 @@ public class HttpConnection implements Connection {
         try {
             return socket.getInputStream();
         } catch (IOException ex) {
-            Logger.getLogger(HttpConnection.class.getName()).
+            Logger.getLogger(TcpConnection.class.getName()).
                     log(Level.SEVERE, "Failed to get InputStream from Socket object.", ex);
             return null;
         }
@@ -67,7 +68,7 @@ public class HttpConnection implements Connection {
                     new InputStreamReader(socket.getInputStream()));
             return dataIn.readLine();
         } catch (Throwable ex) {
-            Logger.getLogger(HttpConnection.class.getName()).
+            Logger.getLogger(TcpConnection.class.getName()).
                     log(Level.SEVERE, "Failed to read string from connection.", ex);
             return null;
         }

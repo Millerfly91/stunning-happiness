@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package network;
+package network.tcp;
 
-import network.connection.HttpConnection;
-import network.connection.Connection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,12 +16,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.connection.Connection;
+import network.connection.HttpConnection;
 
 /**
  *
  * @author Jacob
  */
-public class NetworkServer {
+public class TcpServer {
 
     private ServerSocket sockServ;
     private final BlockingQueue<Runnable> runQueue;
@@ -32,8 +32,8 @@ public class NetworkServer {
     private int port;
 
     public static void main(String[] argv) {
-        NetworkServer testServ
-                = new NetworkServer().
+        TcpServer testServ
+                = new TcpServer().
                 setAction(conn -> {
                     try {
                         String recievedData = conn.readAsString();
@@ -47,27 +47,27 @@ public class NetworkServer {
                 start();
     }
 
-    public NetworkServer() {
+    public TcpServer() {
         this.runQueue = new LinkedBlockingQueue<>();
         this.threadExecutor = new ThreadPoolExecutor(0, 3, 10, TimeUnit.MINUTES, runQueue);
     }
 
-    public NetworkServer start() {
+    public TcpServer start() {
         try {
             sockServ = new ServerSocket(port);
             setNextWorker();
         } catch (IOException ex) {
-            Logger.getLogger(NetworkServer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return this;
     }
 
-    public NetworkServer setAction(ConnectionAction connectionAction) {
+    public TcpServer setAction(ConnectionAction connectionAction) {
         this.connectionAction = connectionAction;
         return this;
     }
 
-    public NetworkServer setPort(int port) {
+    public TcpServer setPort(int port) {
         this.port = port;
         return this;
     }
@@ -77,7 +77,7 @@ public class NetworkServer {
             try {
                 sockServ.close();
             } catch (IOException ex) {
-                Logger.getLogger(NetworkServer.class.getName()).log(Level.WARNING, "Error trying to close socket.", ex);
+                Logger.getLogger(TcpServer.class.getName()).log(Level.WARNING, "Error trying to close socket.", ex);
             }
         }
     }
@@ -122,7 +122,7 @@ public class NetworkServer {
                 timeToProcess = System.currentTimeMillis() - timeToProcess;
                 System.out.println("Time to process connection: " + timeToProcess + " ms");
             } catch (Throwable ex) {
-                Logger.getLogger(NetworkServer.class.getName()).log(Level.SEVERE,
+                Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE,
                         "Error made it to top of worker.", ex);
             }
         }
@@ -135,4 +135,6 @@ public class NetworkServer {
         public abstract void action(Connection conn);
     }
 
+
+    
 }

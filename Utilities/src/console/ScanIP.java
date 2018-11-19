@@ -19,9 +19,9 @@ import java.util.List;
 public class ScanIP {
 
     public static void main(String[] argv) throws IOException, InterruptedException {
-       File outputFile = new File("C:\\testical.txt");
-        outputFile.createNewFile();
-        List<String> results = ConsoleCommand.runCommand("arp -a");
+        List<String> results = ConsoleCommand.runCommand("nmap -sn 192.168.1.0/24 -vv");
+        System.out.println(results);
+//        List<String> results = ConsoleCommand.runCommand("arp -a");
 //        List<String> IPs = new; 
         separateIPs(results);
     }
