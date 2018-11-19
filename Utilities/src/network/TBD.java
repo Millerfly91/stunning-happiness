@@ -23,21 +23,20 @@ public class TBD {
     NetworkServer server;
     List validatedClients;
     String message;
-    String port = "1109";
-    
 
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws IOException {
         TBD startserv = new TBD();
         startserv.startServer();
+        startserv.findClient();
 
 //        startserv.connectClient("192.168.1.10", "1109", "What up Ernie?");
     }
 
     public void startServer() {
-       ConnectionAction newConnectionAction = conn -> {
+        ConnectionAction newConnectionAction = conn -> {
             validateIncomingConnection(conn);
         };
-        
+
         server
                 = new NetworkServer().
                         setAction(newConnectionAction).
@@ -48,31 +47,34 @@ public class TBD {
     public void validateIncomingConnection(Connection conn) {
         try {
             String recievedData = conn.readAsString();
-            
-            if (recievedData.startsWith(keyword)){
-                System.out.println(recievedData.substring(keyword.length()+1));
+
+            if (recievedData.startsWith(keyword)) {
+                System.out.println(recievedData.substring(keyword.length() + 1));
                 conn.sendString(keyword + " Recieved = " + recievedData);
-                
+
             }
-                                    
-            
+
         } catch (Throwable t) {
             t.printStackTrace();
         }
     }
-    
 
     public void connectClient(String clientAddress, String content) {
         NetworkClient testInstance = new NetworkClient();
-        testInstance.connect(clientAddress, port);
-        testInstance.transmitStream(content);
+        try {
+            System.out.println("attempting " + clientAddress);
+            testInstance.connect(clientAddress, port);
+            testInstance.transmitStream(content);
+        } catch (Throwable t) {
+
+        }
     }
 
     public void findClient() throws IOException {
         List<String> IPList = ScanIP.getActiveIPs();
         TBD searchServ = new TBD();
 
-        for (String line  : IPList) {
+        for (String line : IPList) {
             searchServ.connectClient(line, keyword);
         }
     }

@@ -71,7 +71,7 @@ public class NetworkClient {
             Socket clientSocket = new Socket(destIp, Integer.parseInt(port));
             this.currentSocket = clientSocket;
         } catch (IOException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 }
