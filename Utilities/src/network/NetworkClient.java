@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,9 +26,26 @@ public class NetworkClient {
     }
 
     public static void testMethod() {
-            NetworkClient testInstance = new NetworkClient();
-            testInstance.connect("192.168.1.10", "1109");
-            testInstance.transmitStream("What up Ernie?");
+        NetworkClient testInstance = new NetworkClient();
+        testInstance.connect("192.168.1.10", "1109");
+        testInstance.transmitStream("What up Ernie?");
+    }
+
+    public String recieveString() {
+        String response = null;
+        try (BufferedReader dataIn
+                = new BufferedReader(new InputStreamReader(currentSocket.getInputStream()))) {
+            Thread.sleep(3000);
+            response = dataIn.readLine();
+            System.out.println("Local Port for client: " + currentSocket.getLocalPort());
+            System.out.println("Remote \"SocketAddress\": " + currentSocket.getRemoteSocketAddress().toString());
+            System.out.println("Remote Response: " + response);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(NetworkClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
     }
 
     public String transmitStream(String out) {

@@ -26,7 +26,6 @@ import network.connection.HttpConnection;
 public class TcpServer {
 
     private ServerSocket sockServ;
-    private final BlockingQueue<Runnable> runQueue;
     private final ThreadPoolExecutor threadExecutor;
     private ConnectionAction connectionAction;
     private int port;
@@ -48,8 +47,7 @@ public class TcpServer {
     }
 
     public TcpServer() {
-        this.runQueue = new LinkedBlockingQueue<>();
-        this.threadExecutor = new ThreadPoolExecutor(0, 3, 10, TimeUnit.MINUTES, runQueue);
+        this.threadExecutor = new ThreadPoolExecutor(1, 3, 10, TimeUnit.MINUTES,  new LinkedBlockingQueue<>());
     }
 
     public TcpServer start() {
@@ -95,11 +93,10 @@ public class TcpServer {
         threadExecutor.shutdownNow();
     }
 
-    protected HttpConnection blockForNextConnection() throws IOException {
+    protected HttpConnection waitForNextConnection() throws IOException {
         Socket s = sockServ.accept();
         return new HttpConnection(s);
     }
-
     public class ServerTask implements Runnable {
 
         BufferedReader dataIn;
@@ -114,7 +111,7 @@ public class TcpServer {
         public void run() {
             try {
                 System.out.println("Starting up client handler.");
-                HttpConnection newHttpConn = blockForNextConnection();
+                HttpConnection newHttpConn = waitForNextConnection();
                 setNextWorker();
 
                 long timeToProcess = System.currentTimeMillis();

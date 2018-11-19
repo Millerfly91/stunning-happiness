@@ -28,6 +28,10 @@ public class TcpConnection implements Connection {
         this.socket = socket;
     }
 
+    public Socket getSocket() {
+        return this.socket;
+    }
+
     @Override
     public void sendString(String message) {
         try {

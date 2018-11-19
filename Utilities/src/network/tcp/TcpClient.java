@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,7 +19,6 @@ import java.net.Socket;
  */
 public class TcpClient {
 
-    private Socket currentSocket;
     private TcpConnection conn;
 
     public static void main(String argv[]) throws Exception {
@@ -28,24 +29,41 @@ public class TcpClient {
         for (int i = 0; i < 4; i++) {
             TcpClient testInstance = new TcpClient();
             testInstance.connect("192.168.1.10", "1109");
-            testInstance.transmitStream("What up Ernie?");
+            testInstance.sendString("What up Ernie?");
         }
     }
 
-    public String transmitStream(String out) {
+    public String sendString(String out) {
         String response = null;
         try (PrintWriter dataOut
-                = new PrintWriter(currentSocket.getOutputStream());
+                = new PrintWriter(conn.getOutputStream());
                 BufferedReader dataIn
-                = new BufferedReader(new InputStreamReader(currentSocket.getInputStream()))) {
+                = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             dataOut.println(out);
             dataOut.flush();
             response = dataIn.readLine();
-            System.out.println("Local Port for client: " + currentSocket.getLocalPort());
-            System.out.println("Remote \"SocketAddress\": " + currentSocket.getRemoteSocketAddress().toString());
+            System.out.println("Local Port for client: " + conn.getSocket().getLocalPort());
+            System.out.println("Remote \"SocketAddress\": " + conn.getSocket().getRemoteSocketAddress().toString());
             System.out.println("Remote Response: " + response);
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+        return response;
+    }
+
+    public String recieveString() {
+        String response = null;
+        try (BufferedReader dataIn
+                = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+            Thread.sleep(3000);
+            response = dataIn.readLine();
+            System.out.println("Local Port for client: " + conn.getSocket().getLocalPort());
+            System.out.println("Remote \"SocketAddress\": " + conn.getSocket().getRemoteSocketAddress().toString());
+            System.out.println("Remote Response: " + response);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TcpClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
     }
@@ -55,6 +73,14 @@ public class TcpClient {
             this.conn = new TcpConnection(new Socket(destIp, Integer.parseInt(port)));
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void close() {
+        try {
+            this.conn.getSocket().close();
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 
