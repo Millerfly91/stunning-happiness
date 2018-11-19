@@ -50,7 +50,7 @@ public class TBD {
 
             if (recievedData.startsWith(keyword)) {
                 System.out.println(recievedData.substring(keyword.length() + 1));
-                conn.sendString(keyword + " Recieved = " + recievedData);
+                conn.sendString(" Recieved = " + recievedData.substring(keyword.length() + 1));
 
             }
 
