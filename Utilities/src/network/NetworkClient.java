@@ -24,11 +24,9 @@ public class NetworkClient {
     }
 
     public static void testMethod() {
-        for (int i = 0; i < 4; i++) {
             NetworkClient testInstance = new NetworkClient();
             testInstance.connect("192.168.1.10", "1109");
             testInstance.transmitStream("What up Ernie?");
-        }
     }
 
     public String transmitStream(String out) {
