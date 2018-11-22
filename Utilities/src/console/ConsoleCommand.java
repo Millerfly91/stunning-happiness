@@ -23,24 +23,31 @@ public class ConsoleCommand {
     }
 
     public static List runCommand(String command) throws IOException {
+        return runCommand(command, 500);
+    }
+
+    public static List runCommand(String command, long timeOut) throws IOException {
         File cmdOutput = new File("C:\\jakeTempFile.txt");
 
         if (cmdOutput.exists() != true) {
             cmdOutput.createNewFile();
         }
+        File cmdOutput_done = new File("C:\\completedcmdout.txt");
+//        File cmdOutput_done = new File(cmdOutput.getAbsolutePath()+ "_done");
 
-        executeCommandLine("" + command + " > " + cmdOutput.getAbsolutePath() + " && exit");
-
-        while(cmdOutput.lastModified() > System.currentTimeMillis() - 500){
+        executeCommandLine("" + command + " > " + cmdOutput.getAbsolutePath() +" && exit");
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ConsoleCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-//        try {
-//            Thread.sleep(500);
-//        } catch (Throwable ex) {
-//            Logger.getLogger(ConsoleCommand.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        List<String> cmdOutputLines = readFile(cmdOutput);
-        cmdOutput.delete();
+
+        executeCommandLine("rename " + cmdOutput.getAbsolutePath() + " " + cmdOutput_done.getName() + " && exit");
+
+        while (!cmdOutput_done.exists()) {
+        }
+        List<String> cmdOutputLines = readFile(cmdOutput_done);
+        cmdOutput_done.delete();
         return cmdOutputLines;
     }
 

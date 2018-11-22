@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class IPConfig {
 
-    public static void main(String[] argv) throws IOException, InterruptedException {
+    public static void main(String[] argv) throws IOException {
         File outputFile = new File("C:\\testical.txt");
         outputFile.createNewFile();
         ConsoleCommand.runCommand("ipconfig");

@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class runCommand {
 
-    public static void main(String[] argv) throws IOException, InterruptedException {
+    public static void main(String[] argv) throws IOException {
         
 //        another option
 //        results.forEach(System.out::println);
