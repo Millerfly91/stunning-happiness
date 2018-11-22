@@ -5,11 +5,10 @@
  */
 package console;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,46 +19,33 @@ import java.util.logging.Logger;
  */
 public class ConsoleCommand {
 
-    public static void main(String[] argv) throws IOException, InterruptedException {
-
-//        another option
-//        results.forEach(System.out::println);
+    public static void main(String[] argv) {
     }
 
     public static List runCommand(String command) throws IOException {
-        File outputFile = new File("C:\\jakeTempFIle.txt");
-        if (outputFile.exists() != true) {
-            outputFile.createNewFile();
+        File cmdOutput = new File("C:\\jakeTempFile.txt");
+
+        if (cmdOutput.exists() != true) {
+            cmdOutput.createNewFile();
         }
-        executeCommandLine("" + command + " > " + outputFile.getAbsolutePath() + " && exit && exit");
+
+        executeCommandLine("" + command + " > " + cmdOutput.getAbsolutePath() + " && exit");
 
         try {
-            Thread.sleep(10 * 1000);
+            Thread.sleep(500);
         } catch (Throwable ex) {
             Logger.getLogger(ConsoleCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        List<String> fileLines = FileReader(outputFile);
-
-        outputFile.delete();
-        executeCommandLine("del " + outputFile + " && exit");
-
-//        ---------   to print in this  -------------
-//        for (String line : fileLines) {
-//            System.out.println(line);
-//        }
-        return fileLines;
+        List<String> cmdOutputLines = readFile(cmdOutput);
+        cmdOutput.delete();
+        return cmdOutputLines;
     }
 
-    public static boolean isNumeric(String s) {
-        return s != null && s.matches("[-+]?\\d*\\.?\\d+");
-    }
-
-    static List<String> FileReader(File file) throws IOException {
+    static List<String> readFile(File file) throws IOException {
         return Files.readAllLines(file.toPath());
     }
 
-    protected static String executeCommandLine(String command) {
+    protected static List<String> executeCommandLine(String command) {
         try {
             Process proc
                     = Runtime.getRuntime().exec("powershell -Command "
@@ -71,16 +57,9 @@ public class ConsoleCommand {
                             /* Line executed in command prompt: */
                             + "-ArgumentList '/c  " + command + "'"
                             + "\"");
-            BufferedReader reader
-                    = new BufferedReader(
-                            new InputStreamReader(
-                                    proc.getInputStream()));
-
-            
-            reader.lines().forEach(line -> System.out.println(line));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return new ArrayList<String>();
     }
 }
