@@ -30,7 +30,7 @@ public class ConsoleCommand {
         if(outputFile.exists()!= true){
             outputFile.createNewFile();
         }
-        executeCommandLine(command + " > " + outputFile.getAbsolutePath() + " && exit");
+        executeCommandLine("" + command + " > " + outputFile.getAbsolutePath() + " && exit && exit");
 
         try {
             Thread.sleep(10*1000);
@@ -40,6 +40,7 @@ public class ConsoleCommand {
         
         List<String> fileLines = FileReader(outputFile);
 
+        outputFile.delete();
         executeCommandLine("del " + outputFile + " && exit");
         
 //        ---------   to print in this  -------------
@@ -61,13 +62,8 @@ public class ConsoleCommand {
     protected static String executeCommandLine(String command) {
 
         try {
-            // Just one line and you are done !  
-            // We have given a command to start cmd 
-            // /K : Carries out command specified by string 
-            Runtime.getRuntime().exec("cmd  /K \"powershell -Command "
-                    + "\"Start-Process 'cmd.exe' -Verb runAs -ArgumentList \"\"/k " + command + "\"\"\""
-                    + "\"");
-//            Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
+            Runtime.getRuntime().exec("powershell -Command "
+                    + "\"Start-Process \'cmd.exe\' -Verb runAs -ArgumentList \'/c  " + command + "\'\"");
 
         } catch (Exception e) {
             System.out.println("HEY Buddy ! U r Doing Something Wrong ");
