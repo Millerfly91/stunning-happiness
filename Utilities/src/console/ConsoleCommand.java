@@ -31,7 +31,7 @@ public class ConsoleCommand {
 
         executeCommandLine("" + command + " > " + cmdOutput.getAbsolutePath() + " && exit");
 
-        while(cmdOutput.lastModified() > System.currentTimeMillis() - 100){
+        while(cmdOutput.lastModified() > System.currentTimeMillis() - 500){
         }
         
 //        try {
@@ -56,7 +56,7 @@ public class ConsoleCommand {
                             /* Starts a command prompt: */
                             + "Start-Process 'cmd.exe' "
                             /* Start as administrator: */
-                            + "-Verb runAs "
+                            + "-Verb runAs -WindowStyle hidden "
                             /* Line executed in command prompt: */
                             + "-ArgumentList '/c  " + command + "'"
                             + "\"");
