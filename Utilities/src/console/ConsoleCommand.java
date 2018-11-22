@@ -64,11 +64,11 @@ public class ConsoleCommand {
             Process proc
                     = Runtime.getRuntime().exec("powershell -Command "
                             + "\""
-                            /* Starts a command prompt. */
+                            /* Starts a command prompt: */
                             + "Start-Process 'cmd.exe' "
-                            /* Start as administrator. */
+                            /* Start as administrator: */
                             + "-Verb runAs "
-                            /* Line executed in command prompt. */
+                            /* Line executed in command prompt: */
                             + "-ArgumentList '/c  " + command + "'"
                             + "\"");
             BufferedReader reader
