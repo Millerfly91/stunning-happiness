@@ -31,11 +31,14 @@ public class ConsoleCommand {
 
         executeCommandLine("" + command + " > " + cmdOutput.getAbsolutePath() + " && exit");
 
-        try {
-            Thread.sleep(500);
-        } catch (Throwable ex) {
-            Logger.getLogger(ConsoleCommand.class.getName()).log(Level.SEVERE, null, ex);
+        while(cmdOutput.lastModified() > System.currentTimeMillis() - 100){
         }
+        
+//        try {
+//            Thread.sleep(500);
+//        } catch (Throwable ex) {
+//            Logger.getLogger(ConsoleCommand.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         List<String> cmdOutputLines = readFile(cmdOutput);
         cmdOutput.delete();
         return cmdOutputLines;
