@@ -76,15 +76,17 @@ public class TBD {
         return false;
     }
 
-    public void connectClient(String clientAddress, String content) {
+    public Connection connectClient(String clientAddress, String content) {
         TcpClient client = new TcpClient();
         try {
             System.out.println("attempting " + clientAddress);
             client.connect(clientAddress, port);
             client.sendString(content);
+            return client.getTcpConnection();
         } catch (Throwable t) {
 
         }
+        return client.getTcpConnection();
     }
 
  public void findClient() throws IOException {
@@ -92,9 +94,9 @@ public class TBD {
         List<String> validatedIPs = new ArrayList<String>();
         String line = "192.168.1.16";
 //        for (String line : IPList) {
-            connectClient(line, keyword + message);
+//            connectClient(line, keyword + message);
 //            validateIncomingConnection();
-            if (checkKeyword() == true){
+            if (validateIncomingConnection(connectClient(line,keyword)) == true){
                 validatedIPs.add(line);
             }
             System.out.println(validatedIPs);
