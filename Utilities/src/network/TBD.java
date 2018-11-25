@@ -8,9 +8,9 @@ package network;
 import java.io.IOException;
 import java.util.List;
 import console.ScanIP;
-import java.util.Arrays;
 import network.NetworkServer.ConnectionAction;
 import network.connection.Connection;
+import network.tcp.TcpClient;
 
 /**
  *
@@ -53,6 +53,7 @@ public class TBD {
             String recievedData = conn.readAsString();
 
             if (recievedData.startsWith(keyword)) {
+                
                 System.out.println(recievedData);
                 conn.sendString(" Recieved = " + recievedData);
 //                String[] thisIP = recievedData.split("192", 5);
@@ -68,11 +69,11 @@ public class TBD {
     }
 
     public void connectClient(String clientAddress, String content) {
-        NetworkClient testInstance = new NetworkClient();
+        TcpClient testInstance = new TcpClient();
         try {
             System.out.println("attempting " + clientAddress);
             testInstance.connect(clientAddress, port);
-            testInstance.transmitStream(content);
+            testInstance.sendString(content);
         } catch (Throwable t) {
 
         }
@@ -82,9 +83,10 @@ public class TBD {
         List<String> IPList = ScanIP.getActiveIPs();
         TBD searchServ = new TBD();
 
-        for (String line : IPList) {
-            searchServ.connectClient(line, keyword + message);
-        }
+            searchServ.connectClient("192.168.1.18", keyword + message);
+//        for (String line : IPList) {
+//            searchServ.connectClient(line, keyword + message);
+//        }
     }
     
 //    public void getClientIPs(Connection conn){

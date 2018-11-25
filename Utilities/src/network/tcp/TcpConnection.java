@@ -22,10 +22,24 @@ import network.connection.Connection;
  */
 public class TcpConnection implements Connection {
 
-    private final Socket socket;
+    private  Socket socket;
+    private PrintWriter activeOutput;
+    private BufferedReader activeInput;
 
     public TcpConnection(final Socket socket) {
         this.socket = socket;
+    }
+
+    public TcpConnection(final String address, int port) {
+        try {
+            this.socket = new Socket(address, port);
+            activeOutput = new PrintWriter(this.socket.getOutputStream(), true);
+            activeInput = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        } catch (IOException ex) {
+            Logger.getLogger(TcpConnection.class.getName()).log(Level.SEVERE, null,
+                    "Faild to get socket connection.");
+            this.socket = null;
+        }
     }
 
     public Socket getSocket() {
@@ -34,13 +48,8 @@ public class TcpConnection implements Connection {
 
     @Override
     public void sendString(String message) {
-        try {
-            PrintWriter dataOut = new PrintWriter(socket.getOutputStream(), true);
-            dataOut.println(message);
-        } catch (IOException ex) {
-            Logger.getLogger(TcpConnection.class.getName()).
-                    log(Level.SEVERE, "Failed to send string " + message, ex);
-        }
+//            PrintWriter dataOut = new PrintWriter(socket.getOutputStream(), true);
+        this.activeOutput.println(message);
     }
 
     @Override
@@ -68,9 +77,7 @@ public class TcpConnection implements Connection {
     @Override
     public String readAsString() {
         try {
-            BufferedReader dataIn = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-            return dataIn.readLine();
+            return activeInput.readLine();
         } catch (Throwable ex) {
             Logger.getLogger(TcpConnection.class.getName()).
                     log(Level.SEVERE, "Failed to read string from connection.", ex);

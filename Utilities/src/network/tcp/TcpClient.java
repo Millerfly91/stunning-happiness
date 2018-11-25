@@ -54,33 +54,22 @@ public class TcpClient {
 
     public String sendString(String out) {
         String response = null;
-        try (PrintWriter dataOut
-                = new PrintWriter(conn.getOutputStream());
-                BufferedReader dataIn
-                = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-            dataOut.println(out);
-            dataOut.flush();
-            response = dataIn.readLine();
-            System.out.println("Local Port for client: " + conn.getSocket().getLocalPort());
-            System.out.println("Remote \"SocketAddress\": " + conn.getSocket().getRemoteSocketAddress().toString());
-            System.out.println("Remote Response: " + response);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return response;
+        conn.sendString("jakes new test messages to sendstring from tcpconnectino.");
+//            response = dataIn.readLine();
+//            System.out.println("Local Port for client: " + conn.getSocket().getLocalPort());
+//            System.out.println("Remote \"SocketAddress\": " + conn.getSocket().getRemoteSocketAddress().toString());
+//            System.out.println("Remote Response: " + response);
+        return recieveString();
     }
 
     public String recieveString() {
         String response = null;
-        try (BufferedReader dataIn
-                = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+        try {
             Thread.sleep(3000);
-            response = dataIn.readLine();
+            response = conn.readAsString();
             System.out.println("Local Port for client: " + conn.getSocket().getLocalPort());
             System.out.println("Remote \"SocketAddress\": " + conn.getSocket().getRemoteSocketAddress().toString());
             System.out.println("Remote Response: " + response);
-        } catch (IOException ex) {
-            ex.printStackTrace();
         } catch (InterruptedException ex) {
             Logger.getLogger(TcpClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -89,8 +78,9 @@ public class TcpClient {
 
     public void connect(String destIp, String port) {
         try {
-            this.conn = new TcpConnection(new Socket(destIp, Integer.parseInt(port)));
-        } catch (IOException ex) {
+            this.conn = new TcpConnection(destIp, Integer.parseInt(port));
+//            this.conn = new TcpConnection(new Socket(destIp, Integer.parseInt(port)));
+        } catch (Throwable ex) {
             ex.printStackTrace();
         }
     }
