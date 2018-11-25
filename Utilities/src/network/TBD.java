@@ -32,7 +32,6 @@ public class TBD {
         TBD startserv = new TBD();
         startserv.startServer();
         startserv.findClient();
-        
 
 //        startserv.connectClient("192.168.1.10", "1109", "What up Ernie?");
     }
@@ -44,9 +43,9 @@ public class TBD {
 
         server
                 = new TcpServer().
-                        setAction(newConnectionAction).
-                        setPort(1109).
-                        start();
+                setAction(newConnectionAction).
+                setPort(1109).
+                start();
     }
 
     public void validateIncomingConnection(Connection conn) {
@@ -56,7 +55,7 @@ public class TBD {
             String recievedData = conn.readAsString();
             System.out.println(recievedData);
             if (recievedData.startsWith(keyword)) {
-                
+
                 System.out.println(recievedData);
                 conn.sendString(" Recieved = " + recievedData);
 //                String[] thisIP = recievedData.split("192", 5);
@@ -82,18 +81,18 @@ public class TBD {
         }
     }
 
- public void findClient() throws IOException {
+    public void findClient() throws IOException {
         List<String> IPList = ScanIP.getActiveIPs();
         List<String> validatedIPs = new ArrayList<String>();
         TBD searchServ = new TBD();
         String line = "192.168.1.16";
 //        for (String line : IPList) {
-            searchServ.connectClient(line, keyword + message);
+        searchServ.connectClient(line, keyword + message);
 //            validateIncomingConnection();
-            if (validatedIP == true){
-                validatedIPs.add(line);
-            }
-            System.out.println(validatedIPs);
+        if (validatedIP == true) {
+            validatedIPs.add(line);
+        }
+        System.out.println(validatedIPs);
 //        }
     }
 //    public void getClientIPs(Connection conn){
