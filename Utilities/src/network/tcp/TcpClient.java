@@ -53,12 +53,7 @@ public class TcpClient {
     }
 
     public String sendString(String out) {
-        String response = null;
-        conn.sendString("jakes new test messages to sendstring from tcpconnectino.");
-//            response = dataIn.readLine();
-//            System.out.println("Local Port for client: " + conn.getSocket().getLocalPort());
-//            System.out.println("Remote \"SocketAddress\": " + conn.getSocket().getRemoteSocketAddress().toString());
-//            System.out.println("Remote Response: " + response);
+        conn.sendString(out);
         return recieveString();
     }
 
