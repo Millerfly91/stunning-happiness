@@ -27,6 +27,7 @@ public class TBD {
     List validatedClients;
     String message = "Hello Ernie!";
     boolean validatedIP;
+    List<String> validatedIPs = new ArrayList<String>();
 
     public static void main(String[] argv) throws IOException {
         TBD startserv = new TBD();
@@ -92,8 +93,7 @@ public class TBD {
 
     public void findClient() throws IOException {
 //        List<String> IPList = ScanIP.getActiveIPs();
-        List<String> validatedIPs = new ArrayList<String>();
-        String line = "192.168.1.16";
+                String line = "192.168.1.16";
 //        for (String line : IPList) {
 //            connectClient(line, keyword + message);
 //            validateIncomingConnection();
