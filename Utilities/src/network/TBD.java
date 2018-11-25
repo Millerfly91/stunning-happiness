@@ -8,6 +8,7 @@ package network;
 import java.io.IOException;
 import java.util.List;
 import console.ScanIP;
+import java.util.Arrays;
 import network.NetworkServer.ConnectionAction;
 import network.connection.Connection;
 
@@ -28,6 +29,7 @@ public class TBD {
         TBD startserv = new TBD();
         startserv.startServer();
         startserv.findClient();
+        
 
 //        startserv.connectClient("192.168.1.10", "1109", "What up Ernie?");
     }
@@ -45,18 +47,24 @@ public class TBD {
     }
 
     public void validateIncomingConnection(Connection conn) {
+        boolean validated = false;
+        List clientIPs;
         try {
             String recievedData = conn.readAsString();
 
             if (recievedData.startsWith(keyword)) {
-                System.out.println(recievedData.substring(keyword.length() + 1));
-                conn.sendString(" Recieved = " + recievedData.substring(keyword.length() + 1));
-
+                System.out.println(recievedData);
+                conn.sendString(" Recieved = " + recievedData);
+//                String[] thisIP = recievedData.split("192", 5);
+//                System.out.println(Arrays.toString(thisIP));
+////              = clientIPs.add()
+//                validated = true;
             }
 
         } catch (Throwable t) {
             t.printStackTrace();
         }
+//        return validated;
     }
 
     public void connectClient(String clientAddress, String content) {
@@ -78,5 +86,8 @@ public class TBD {
             searchServ.connectClient(line, keyword + message);
         }
     }
-
+    
+//    public void getClientIPs(Connection conn){
+//        if (validated)
+//    }
 }
