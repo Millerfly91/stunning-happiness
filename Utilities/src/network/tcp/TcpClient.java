@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.input.TeeInputStream;
 
 /**
  *
@@ -22,7 +23,25 @@ public class TcpClient {
     private TcpConnection conn;
 
     public static void main(String argv[]) throws Exception {
-        testMethod();
+        TcpClient testInstance = new TcpClient();
+        testInstance.connect("192.168.1.10", "1109");
+        testInstance.sendString("What up Ernie?");
+        System.out.println(testInstance.waitUntilRecieve());
+    }
+
+    private String waitUntilRecieve() {
+        while (true) {
+            try {
+                Thread.sleep(100);
+                String response = conn.readAsString();
+                if (response != null && response.length() > 0) {
+                    return response;
+                }
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+
     }
 
     public static void testMethod() {
