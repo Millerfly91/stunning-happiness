@@ -47,7 +47,7 @@ public class TcpServer {
     }
 
     public TcpServer() {
-        this.threadExecutor = new ThreadPoolExecutor(1, 3, 10, TimeUnit.MINUTES,  new LinkedBlockingQueue<>());
+        this.threadExecutor = new ThreadPoolExecutor(1, 3, 10, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
     }
 
     public TcpServer start() {
@@ -97,6 +97,7 @@ public class TcpServer {
         Socket s = sockServ.accept();
         return new HttpConnection(s);
     }
+
     public class ServerTask implements Runnable {
 
         BufferedReader dataIn;
@@ -127,11 +128,9 @@ public class TcpServer {
     }
 
     @FunctionalInterface
-    public interface ConnectionAction {
+    public interface ConnectionAction<T extends Connection> {
 
-        public abstract void action(Connection conn);
+        public abstract void action(T conn);
     }
 
-
-    
 }

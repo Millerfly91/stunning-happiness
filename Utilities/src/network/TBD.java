@@ -7,11 +7,11 @@ package network;
 
 import java.io.IOException;
 import java.util.List;
-import console.ScanIP;
 import java.util.ArrayList;
 import network.tcp.TcpServer.ConnectionAction;
 import network.connection.Connection;
 import network.tcp.TcpClient;
+import network.tcp.TcpConnection;
 import network.tcp.TcpServer;
 
 /**
@@ -38,47 +38,41 @@ public class TBD {
     }
 
     public void startServer() {
-        ConnectionAction newConnectionAction = conn -> {
+        ConnectionAction<TcpConnection> newConnectionAction = conn -> {
             validateIncomingConnection(conn);
         };
 
         server
                 = new TcpServer().
-                        setAction(newConnectionAction).
-                        setPort(1109).
-                        start();
+                setAction(newConnectionAction).
+                setPort(1109).
+                start();
     }
 
-    public boolean validateIncomingConnection(Connection conn) {
-//        validatedIP = false;
-        List clientIPs;
+    public boolean validateIncomingConnection(TcpConnection conn) {
         try {
             String recievedData = conn.readAsString();
-            System.out.println(recievedData);
-            if (checkKeyword(recievedData, conn)) {
+            if (checkKeyword(recievedData)) {
+                conn.sendString(" checkKeyword says  this is good word Recieved = " + recievedData);
+                validatedIPs.add(conn.getSocket().getRemoteSocketAddress().toString());
                 return true;
             }
-
         } catch (Throwable t) {
             t.printStackTrace();
         }
         return false;
     }
 
-    public boolean checkKeyword(String recievedData, Connection conn) {
+    public boolean checkKeyword(String recievedData) {
+        boolean valid = false;
         if (recievedData.contains(keyword)) {
-            System.out.println(recievedData);
-            conn.sendString(" checkKeyword says  this is good word Recieved = " + recievedData);
-//                String[] thisIP = recievedData.split("192", 5);
-//                System.out.println(Arrays.toString(thisIP));
-////              = clientIPs.add()
-//                validatedIP = true;
-            return true;
+            valid = true;
         }
-        return false;
+        System.out.println("checkKeyword(" + recievedData + ") = " + valid);
+        return valid;
     }
 
-    public Connection connectClient(String clientAddress, String content) {
+    public TcpConnection connectClient(String clientAddress, String content) {
         TcpClient client = new TcpClient();
         try {
             System.out.println("attempting test changess" + clientAddress);
@@ -93,13 +87,12 @@ public class TBD {
 
     public void findClient() throws IOException {
 //        List<String> IPList = ScanIP.getActiveIPs();
-                String line = "192.168.1.16";
+        String line = "192.168.1.18";
 //        for (String line : IPList) {
 //            connectClient(line, keyword + message);
 //            validateIncomingConnection();
         if (validateIncomingConnection(connectClient(line, keyword)) == true) {
             System.out.println("Adding to validatedIps: " + line);
-            validatedIPs.add(line);
         }
         System.out.println(validatedIPs);
 //        }
