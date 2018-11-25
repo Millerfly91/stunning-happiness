@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import network.tcp.TcpConnection;
 
 /**
  *
@@ -29,6 +30,10 @@ public class NetworkClient {
         NetworkClient testInstance = new NetworkClient();
         testInstance.connect("192.168.1.10", "1109");
         testInstance.transmitStream("What up Ernie?");
+    }
+
+    public TcpConnection getTcpConnection() {
+        return new TcpConnection(currentSocket);
     }
 
     public String recieveString() {
