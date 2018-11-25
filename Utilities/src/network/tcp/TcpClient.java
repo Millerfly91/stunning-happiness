@@ -57,10 +57,6 @@ public class TcpClient {
         return recieveString();
     }
 
-    public TcpConnection getTcpConnection() {
-        return this.conn;
-    }
-
     public String recieveString() {
         String response = null;
         try {
