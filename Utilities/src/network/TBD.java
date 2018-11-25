@@ -32,7 +32,6 @@ public class TBD {
         TBD startserv = new TBD();
         startserv.startServer();
         startserv.findClient();
-        
 
 //        startserv.connectClient("192.168.1.10", "1109", "What up Ernie?");
     }
@@ -55,7 +54,9 @@ public class TBD {
         try {
             String recievedData = conn.readAsString();
             System.out.println(recievedData);
-            if (checkKeyword(recievedData, conn)) return true;
+            if (checkKeyword(recievedData, conn)) {
+                return true;
+            }
 
         } catch (Throwable t) {
             t.printStackTrace();
@@ -64,9 +65,9 @@ public class TBD {
     }
 
     public boolean checkKeyword(String recievedData, Connection conn) {
-        if (recievedData.startsWith(keyword)) {
+        if (recievedData.contains(keyword)) {
             System.out.println(recievedData);
-            conn.sendString(" Recieved = " + recievedData);
+            conn.sendString(" checkKeyword says  this is good word Recieved = " + recievedData);
 //                String[] thisIP = recievedData.split("192", 5);
 //                System.out.println(Arrays.toString(thisIP));
 ////              = clientIPs.add()
@@ -79,7 +80,7 @@ public class TBD {
     public Connection connectClient(String clientAddress, String content) {
         TcpClient client = new TcpClient();
         try {
-            System.out.println("attempting " + clientAddress);
+            System.out.println("attempting test changess" + clientAddress);
             client.connect(clientAddress, port);
             client.sendString(content);
             return client.getTcpConnection();
@@ -89,17 +90,18 @@ public class TBD {
         return client.getTcpConnection();
     }
 
- public void findClient() throws IOException {
-        List<String> IPList = ScanIP.getActiveIPs();
+    public void findClient() throws IOException {
+//        List<String> IPList = ScanIP.getActiveIPs();
         List<String> validatedIPs = new ArrayList<String>();
         String line = "192.168.1.16";
 //        for (String line : IPList) {
 //            connectClient(line, keyword + message);
 //            validateIncomingConnection();
-            if (validateIncomingConnection(connectClient(line,keyword)) == true){
-                validatedIPs.add(line);
-            }
-            System.out.println(validatedIPs);
+        if (validateIncomingConnection(connectClient(line, keyword)) == true) {
+            System.out.println("Adding to validatedIps: " + line);
+            validatedIPs.add(line);
+        }
+        System.out.println(validatedIPs);
 //        }
     }
 //    public void getClientIPs(Connection conn){
