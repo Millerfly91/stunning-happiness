@@ -49,34 +49,39 @@ public class TBD {
                         start();
     }
 
-    public void validateIncomingConnection(Connection conn) {
-        boolean validatedIP = false;
+    public boolean validateIncomingConnection(Connection conn) {
+//        validatedIP = false;
         List clientIPs;
         try {
             String recievedData = conn.readAsString();
             System.out.println(recievedData);
-            if (recievedData.startsWith(keyword)) {
-                
-                System.out.println(recievedData);
-                conn.sendString(" Recieved = " + recievedData);
-//                String[] thisIP = recievedData.split("192", 5);
-//                System.out.println(Arrays.toString(thisIP));
-////              = clientIPs.add()
-                validatedIP = true;
-            }
+            if (checkKeyword(recievedData, conn)) return true;
 
         } catch (Throwable t) {
             t.printStackTrace();
         }
-//        return validated;
+        return false;
+    }
+
+    public boolean checkKeyword(String recievedData, Connection conn) {
+        if (recievedData.startsWith(keyword)) {
+            System.out.println(recievedData);
+            conn.sendString(" Recieved = " + recievedData);
+//                String[] thisIP = recievedData.split("192", 5);
+//                System.out.println(Arrays.toString(thisIP));
+////              = clientIPs.add()
+//                validatedIP = true;
+            return true;
+        }
+        return false;
     }
 
     public void connectClient(String clientAddress, String content) {
-        TcpClient testInstance = new TcpClient();
+        TcpClient client = new TcpClient();
         try {
             System.out.println("attempting " + clientAddress);
-            testInstance.connect(clientAddress, port);
-            testInstance.sendString(content);
+            client.connect(clientAddress, port);
+            client.sendString(content);
         } catch (Throwable t) {
 
         }
@@ -85,12 +90,11 @@ public class TBD {
  public void findClient() throws IOException {
         List<String> IPList = ScanIP.getActiveIPs();
         List<String> validatedIPs = new ArrayList<String>();
-        TBD searchServ = new TBD();
         String line = "192.168.1.16";
 //        for (String line : IPList) {
-            searchServ.connectClient(line, keyword + message);
+            connectClient(line, keyword + message);
 //            validateIncomingConnection();
-            if (validatedIP == true){
+            if (checkKeyword() == true){
                 validatedIPs.add(line);
             }
             System.out.println(validatedIPs);
@@ -98,5 +102,9 @@ public class TBD {
     }
 //    public void getClientIPs(Connection conn){
 //        if (validated)
+//    }
+
+//    private boolean validateIncomingConnection() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
 }
