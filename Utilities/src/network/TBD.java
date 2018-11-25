@@ -8,6 +8,7 @@ package network;
 import java.io.IOException;
 import java.util.List;
 import console.ScanIP;
+import java.util.ArrayList;
 import network.NetworkServer.ConnectionAction;
 import network.connection.Connection;
 import network.tcp.TcpClient;
@@ -24,6 +25,7 @@ public class TBD {
     NetworkServer server;
     List validatedClients;
     String message = "Hello Ernie!";
+    boolean validatedIP;
 
     public static void main(String[] argv) throws IOException {
         TBD startserv = new TBD();
@@ -47,7 +49,7 @@ public class TBD {
     }
 
     public void validateIncomingConnection(Connection conn) {
-        boolean validated = false;
+        boolean validatedIP = false;
         List clientIPs;
         try {
             String recievedData = conn.readAsString();
@@ -59,7 +61,7 @@ public class TBD {
 //                String[] thisIP = recievedData.split("192", 5);
 //                System.out.println(Arrays.toString(thisIP));
 ////              = clientIPs.add()
-//                validated = true;
+                validatedIP = true;
             }
 
         } catch (Throwable t) {
@@ -79,16 +81,20 @@ public class TBD {
         }
     }
 
-    public void findClient() throws IOException {
+ public void findClient() throws IOException {
         List<String> IPList = ScanIP.getActiveIPs();
+        List<String> validatedIPs = new ArrayList<String>();
         TBD searchServ = new TBD();
-
-            searchServ.connectClient("192.168.1.18", keyword + message);
+        String line = "192.168.1.16";
 //        for (String line : IPList) {
-//            searchServ.connectClient(line, keyword + message);
+            searchServ.connectClient(line, keyword + message);
+//            validateIncomingConnection();
+            if (validatedIP == true){
+                validatedIPs.add(line);
+            }
+            System.out.println(validatedIPs);
 //        }
     }
-    
 //    public void getClientIPs(Connection conn){
 //        if (validated)
 //    }
