@@ -51,6 +51,10 @@ public class TcpClient {
             testInstance.sendString("What up Ernie?");
         }
     }
+    
+    public TcpConnection getTcpConnection(){
+        return this.conn;
+    }
 
     public String sendString(String out) {
         conn.sendString(out);
