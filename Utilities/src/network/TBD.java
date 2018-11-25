@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.util.List;
 import console.ScanIP;
 import java.util.ArrayList;
-import network.NetworkServer.ConnectionAction;
+import network.tcp.TcpServer.ConnectionAction;
 import network.connection.Connection;
 import network.tcp.TcpClient;
+import network.tcp.TcpServer;
 
 /**
  *
@@ -22,7 +23,7 @@ public class TBD {
     String clientAddress = "192.168.1.10";
     String port = "1109";
     String keyword = "BERT";
-    NetworkServer server;
+    TcpServer server;
     List validatedClients;
     String message = "Hello Ernie!";
     boolean validatedIP;
@@ -42,7 +43,7 @@ public class TBD {
         };
 
         server
-                = new NetworkServer().
+                = new TcpServer().
                         setAction(newConnectionAction).
                         setPort(1109).
                         start();
@@ -53,7 +54,7 @@ public class TBD {
         List clientIPs;
         try {
             String recievedData = conn.readAsString();
-
+            System.out.println(recievedData);
             if (recievedData.startsWith(keyword)) {
                 
                 System.out.println(recievedData);
