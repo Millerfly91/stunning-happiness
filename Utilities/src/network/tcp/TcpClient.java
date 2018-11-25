@@ -56,21 +56,19 @@ public class TcpClient {
         return this.conn;
     }
 
-    public String sendString(String out) {
+    public void sendString(String out) {
         conn.sendString(out);
-        return recieveString();
     }
 
     public String recieveString() {
         String response = null;
         try {
-            Thread.sleep(3000);
             response = conn.readAsString();
             System.out.println("Local Port for client: " + conn.getSocket().getLocalPort());
             System.out.println("Remote \"SocketAddress\": " + conn.getSocket().getRemoteSocketAddress().toString());
             System.out.println("Remote Response: " + response);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(TcpClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Throwable x) {
+            Logger.getLogger(TcpClient.class.getName()).log(Level.SEVERE, null, x);
         }
         return response;
     }

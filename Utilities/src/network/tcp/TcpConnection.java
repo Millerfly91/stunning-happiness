@@ -22,7 +22,7 @@ import network.connection.Connection;
  */
 public class TcpConnection implements Connection {
 
-    private  Socket socket;
+    private Socket socket;
     private PrintWriter activeOutput;
     private BufferedReader activeInput;
 
@@ -33,6 +33,7 @@ public class TcpConnection implements Connection {
     public TcpConnection(final String address, int port) {
         try {
             this.socket = new Socket(address, port);
+            this.socket.setSoTimeout(0);
             activeOutput = new PrintWriter(this.socket.getOutputStream(), true);
             activeInput = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         } catch (IOException ex) {
