@@ -57,7 +57,7 @@ public class TcpClient {
     }
 
     public void sendString(String out) {
-        conn.sendString(out);
+        conn.sendString(out);       
     }
 
     public String recieveString() {

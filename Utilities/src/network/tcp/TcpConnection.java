@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import network.connection.Connection;
+import network.connection.Connection;   
 
 /**
  *

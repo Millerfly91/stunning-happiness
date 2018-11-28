@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -93,9 +92,9 @@ public class TcpServer {
         threadExecutor.shutdownNow();
     }
 
-    protected HttpConnection waitForNextConnection() throws IOException {
+    protected TcpConnection waitForNextConnection() throws IOException {
         Socket s = sockServ.accept();
-        return new HttpConnection(s);
+        return new TcpConnection(s);
     }
 
     public class ServerTask implements Runnable {
@@ -112,11 +111,11 @@ public class TcpServer {
         public void run() {
             try {
                 System.out.println("Starting up client handler.");
-                HttpConnection newHttpConn = waitForNextConnection();
+                TcpConnection newConnection = waitForNextConnection();
                 setNextWorker();
 
                 long timeToProcess = System.currentTimeMillis();
-                action.action(newHttpConn);
+                action.action(newConnection);
                 timeToProcess = System.currentTimeMillis() - timeToProcess;
                 System.out.println("Time to process connection: " + timeToProcess + " ms");
             } catch (Throwable ex) {
