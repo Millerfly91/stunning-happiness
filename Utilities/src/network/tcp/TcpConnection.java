@@ -26,6 +26,10 @@ public class TcpConnection implements Connection {
     private Socket socket;
     private PrintWriter activeOutput;
     private BufferedReader activeInput;
+    private String remoteAddress;
+    private int remotePort;
+    private static int count = 0;
+    private String connName = "TcpConnection" + ++count;
 
     public TcpConnection(final Socket socket) {
         initializeConnection(socket);
@@ -37,7 +41,7 @@ public class TcpConnection implements Connection {
         } catch (IOException t) {
             Logger.getLogger(TcpConnection.class.getName()).log(
                     Level.SEVERE,
-                    "Faild to get socket connection.",t);
+                    "Faild to get socket connection.", t);
             this.socket = null;
         }
     }
@@ -46,6 +50,7 @@ public class TcpConnection implements Connection {
         try {
             this.socket = socket;
             this.socket.setSoTimeout(0);
+            this.remoteAddress = socket.getRemoteSocketAddress().toString();
             activeOutput = new PrintWriter(this.socket.getOutputStream(), true);
             activeInput = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         } catch (SocketException ex) {
@@ -61,6 +66,8 @@ public class TcpConnection implements Connection {
 
     @Override
     public void sendString(String message) {
+        System.out.println(connName + " -> Sending to " + remoteAddress + "..."
+                + " \"" + message + "\"");
         this.activeOutput.println(message);
     }
 
@@ -90,7 +97,9 @@ public class TcpConnection implements Connection {
     public String readAsString() {
         try {
             Thread.sleep(1500);
-            return activeInput.readLine();
+            String message = activeInput.readLine();
+            System.out.println(connName + " -> Recieved from " + remoteAddress + "... \"" + message + "\"");
+            return message;
         } catch (Throwable ex) {
             Logger.getLogger(TcpConnection.class.getName()).
                     log(Level.SEVERE, "Failed to read string from connection.", ex);

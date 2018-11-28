@@ -8,8 +8,6 @@ package network;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
-import network.tcp.TcpServer.ConnectionAction;
-import network.connection.Connection;
 import network.tcp.TcpClient;
 import network.tcp.TcpConnection;
 import network.tcp.TcpServer;
@@ -69,15 +67,12 @@ public class TBD {
         if (recievedData.contains(keyword)) {
             valid = true;
         }
-        System.out.println("checkKeyword(" + recievedData + ") = " + valid);
         return valid;
     }
 
     public TcpConnection connectClient(String clientAddress, String content) {
         TcpClient client = new TcpClient();
         try {
-            System.out.println("Probing " + clientAddress + ". \n "
-                    + "Message: " + content);
             client.connect(clientAddress, port);
             client.sendString(content);
             return client.getTcpConnection();
