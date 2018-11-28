@@ -12,9 +12,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import network.connection.Connection;   
+import network.connection.Connection;
 
 /**
  *
@@ -27,7 +28,17 @@ public class TcpConnection implements Connection {
     private BufferedReader activeInput;
 
     public TcpConnection(final Socket socket) {
-        this.socket = socket;
+        try {
+            this.socket = socket;
+            this.socket.setSoTimeout(0);
+            activeOutput = new PrintWriter(this.socket.getOutputStream(), true);
+            activeInput = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        } catch (SocketException ex) {
+            Logger.getLogger(TcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TcpConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public TcpConnection(final String address, int port) {
