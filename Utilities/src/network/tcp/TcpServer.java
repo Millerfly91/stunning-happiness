@@ -25,6 +25,7 @@ import network.connection.HttpConnection;
 public class TcpServer {
 
     private ServerSocket sockServ;
+    private long totalConnectionsProcessed = 0;
     private final ThreadPoolExecutor threadExecutor;
     private ConnectionAction connectionAction;
     private int port;
@@ -46,7 +47,8 @@ public class TcpServer {
     }
 
     public TcpServer() {
-        this.threadExecutor = new ThreadPoolExecutor(1, 3, 10, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
+        this.threadExecutor = new ThreadPoolExecutor(1, 3,
+                10, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
     }
 
     public TcpServer start() {
@@ -54,12 +56,13 @@ public class TcpServer {
             sockServ = new ServerSocket(port);
             setNextWorker();
         } catch (IOException ex) {
-            Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TcpServer.class.getName()).log(
+                    Level.SEVERE, null, ex);
         }
         return this;
     }
 
-    public TcpServer setAction(ConnectionAction connectionAction) {
+    public TcpServer setAction(ConnectionAction<TcpConnection> connectionAction) {
         this.connectionAction = connectionAction;
         return this;
     }
@@ -74,18 +77,18 @@ public class TcpServer {
             try {
                 sockServ.close();
             } catch (IOException ex) {
-                Logger.getLogger(TcpServer.class.getName()).log(Level.WARNING, "Error trying to close socket.", ex);
+                Logger.getLogger(TcpServer.class.getName()).log(
+                        Level.WARNING,
+                        "Error trying to close socket.", ex);
             }
         }
     }
 
-    private int connCount = 0;
-
     protected void setNextWorker() {
         ServerTask cw = new ServerTask(connectionAction);
-        System.out.println("Starting a new task to wait for next connection. Total: " + connCount++);
+        System.out.println("Starting a new task to wait for next connection. "
+                + "Total: " + ++totalConnectionsProcessed);
         threadExecutor.execute(cw);
-
     }
 
     public void shutdown() {
@@ -117,9 +120,10 @@ public class TcpServer {
                 long timeToProcess = System.currentTimeMillis();
                 action.action(newConnection);
                 timeToProcess = System.currentTimeMillis() - timeToProcess;
-                System.out.println("Time to process connection: " + timeToProcess + " ms");
+                System.out.println("Process time " + timeToProcess + " ms");
             } catch (Throwable ex) {
-                Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE,
+                Logger.getLogger(TcpServer.class.getName()).log(
+                        Level.SEVERE,
                         "Error made it to top of worker.", ex);
             }
         }

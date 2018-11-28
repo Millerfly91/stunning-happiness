@@ -28,6 +28,21 @@ public class TcpConnection implements Connection {
     private BufferedReader activeInput;
 
     public TcpConnection(final Socket socket) {
+        initializeConnection(socket);
+    }
+
+    public TcpConnection(final String address, int port) {
+        try {
+            initializeConnection(new Socket(address, port));
+        } catch (IOException t) {
+            Logger.getLogger(TcpConnection.class.getName()).log(
+                    Level.SEVERE,
+                    "Faild to get socket connection.",t);
+            this.socket = null;
+        }
+    }
+
+    private void initializeConnection(Socket socket) {
         try {
             this.socket = socket;
             this.socket.setSoTimeout(0);
@@ -38,20 +53,6 @@ public class TcpConnection implements Connection {
         } catch (IOException ex) {
             Logger.getLogger(TcpConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }
-
-    public TcpConnection(final String address, int port) {
-        try {
-            this.socket = new Socket(address, port);
-            this.socket.setSoTimeout(0);
-            activeOutput = new PrintWriter(this.socket.getOutputStream(), true);
-            activeInput = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        } catch (IOException ex) {
-            Logger.getLogger(TcpConnection.class.getName()).log(Level.SEVERE, null,
-                    "Faild to get socket connection.");
-            this.socket = null;
-        }
     }
 
     public Socket getSocket() {
@@ -60,7 +61,6 @@ public class TcpConnection implements Connection {
 
     @Override
     public void sendString(String message) {
-//            PrintWriter dataOut = new PrintWriter(socket.getOutputStream(), true);
         this.activeOutput.println(message);
     }
 
@@ -89,7 +89,7 @@ public class TcpConnection implements Connection {
     @Override
     public String readAsString() {
         try {
-            Thread.sleep(800);
+            Thread.sleep(1500);
             return activeInput.readLine();
         } catch (Throwable ex) {
             Logger.getLogger(TcpConnection.class.getName()).

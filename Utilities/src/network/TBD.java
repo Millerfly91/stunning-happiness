@@ -38,13 +38,9 @@ public class TBD {
     }
 
     public void startServer() {
-        ConnectionAction<TcpConnection> newConnectionAction = conn -> {
-            validateIncomingConnection(conn);
-        };
 
-        server
-                = new TcpServer().
-                setAction(newConnectionAction).
+        server = new TcpServer().
+                setAction(this::validateIncomingConnection).
                 setPort(1109).
                 start();
     }
@@ -53,14 +49,19 @@ public class TBD {
         try {
             String recievedData = conn.readAsString();
             if (checkKeyword(recievedData)) {
-                conn.sendString(" checkKeyword says  this is good word Recieved = " + recievedData);
-                validatedIPs.add(conn.getSocket().getRemoteSocketAddress().toString());
+                conn.sendString("BERT: You are being sent this message.");
+                addToValideIPs(conn.getSocket().getRemoteSocketAddress().toString());
                 return true;
             }
         } catch (Throwable t) {
             t.printStackTrace();
         }
         return false;
+    }
+
+    private void addToValideIPs(String adress) {
+        System.out.println("Adding new valid IP to list: " + adress);
+        validatedIPs.add(adress);
     }
 
     public boolean checkKeyword(String recievedData) {
@@ -75,7 +76,8 @@ public class TBD {
     public TcpConnection connectClient(String clientAddress, String content) {
         TcpClient client = new TcpClient();
         try {
-            System.out.println("attempting test changess" + clientAddress);
+            System.out.println("Probing " + clientAddress + ". \n "
+                    + "Message: " + content);
             client.connect(clientAddress, port);
             client.sendString(content);
             return client.getTcpConnection();
@@ -89,7 +91,7 @@ public class TBD {
 //        List<String> IPList = ScanIP.getActiveIPs();
         String line = "192.168.1.18";
 //        for (String line : IPList) {
-//            connectClient(line, keyword + message);
+//            connectClient(line, keyword + message); 
 //            validateIncomingConnection();
         if (validateIncomingConnection(connectClient(line, keyword)) == true) {
             System.out.println("Adding to validatedIps: " + line);
