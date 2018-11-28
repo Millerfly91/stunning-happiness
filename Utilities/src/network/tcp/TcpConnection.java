@@ -89,6 +89,7 @@ public class TcpConnection implements Connection {
     @Override
     public String readAsString() {
         try {
+            Thread.sleep(800);
             return activeInput.readLine();
         } catch (Throwable ex) {
             Logger.getLogger(TcpConnection.class.getName()).
