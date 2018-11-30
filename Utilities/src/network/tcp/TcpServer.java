@@ -38,6 +38,8 @@ public class TcpServer {
                         String recievedData = conn.readAsString();
                         System.out.println(recievedData);
                         conn.sendString("TEST Out. Recieved = " + recievedData);
+                        System.out.println(conn.blockRecieveString());
+                        conn.close();
                     } catch (Throwable t) {
                         t.printStackTrace();
                     }

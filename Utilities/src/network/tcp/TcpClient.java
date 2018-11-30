@@ -5,14 +5,8 @@
  */
 package network.tcp;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.input.TeeInputStream;
 
 /**
  *
@@ -24,9 +18,10 @@ public class TcpClient {
 
     public static void main(String argv[]) throws Exception {
         TcpClient testInstance = new TcpClient();
-        testInstance.connect("192.168.1.10", "1109");
+        testInstance.connect("192.168.1.16", "1109");
         testInstance.sendString("What up Ernie?");
         System.out.println(testInstance.waitUntilRecieve());
+        testInstance.sendString("Second sending from client.");
     }
 
     private String waitUntilRecieve() {
