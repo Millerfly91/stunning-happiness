@@ -28,10 +28,12 @@ public class TBD {
     List<String> validatedIPs = new ArrayList<String>();
 
     public static void main(String[] argv) throws IOException {
-        TBD startserv = new TBD();
-        startserv.startServer();
-        startserv.findClient();
-
+       
+            TBD startserv = new TBD();
+            startserv.startServer();
+             while (true){
+            startserv.findClient();   
+        }
 //        startserv.connectClient("192.168.1.10", "1109", "What up Ernie?");
     }
 
@@ -48,7 +50,7 @@ public class TBD {
             String recievedData = conn.readAsString();
             if (checkKeyword(recievedData)) {
                 conn.sendString("BERT: You are being sent this message.");
-                addToValideIPs(conn.getSocket().getRemoteSocketAddress().toString());
+//                addToValideIPs(conn.getSocket().getRemoteSocketAddress().toString());
                 return true;
             }
         } catch (Throwable t) {
@@ -57,10 +59,10 @@ public class TBD {
         return false;
     }
 
-    private void addToValideIPs(String adress) {
-        System.out.println("Adding new valid IP to list: " + adress);
-        validatedIPs.add(adress);
-    }
+//    private void addToValideIPs(String adress) {
+//        System.out.println("Adding new valid IP to list: " + adress);
+//        validatedIPs.add(adress);
+//    }
 
     public boolean checkKeyword(String recievedData) {
         boolean valid = false;
@@ -82,23 +84,12 @@ public class TBD {
         return client.getTcpConnection();
     }
 
-    public void findClient() throws IOException {
-//        List<String> IPList = ScanIP.getActiveIPs();
+    public List<String> findClient() throws IOException {
         String line = "192.168.1.18";
-//        for (String line : IPList) {
-//            connectClient(line, keyword + message); 
-//            validateIncomingConnection();
         if (validateIncomingConnection(connectClient(line, keyword)) == true) {
             System.out.println("Adding to validatedIps: " + line);
         }
         System.out.println(validatedIPs);
-//        }
+        return validatedIPs;
     }
-//    public void getClientIPs(Connection conn){
-//        if (validated)
-//    }
-
-//    private boolean validateIncomingConnection() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
 }
