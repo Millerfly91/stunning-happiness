@@ -26,15 +26,22 @@ public class TBD {
     String message = "Hello Ernie!";
     boolean validatedIP;
     List<String> validatedIPs = new ArrayList<String>();
+    List<String> unvalidatedIPs = new ArrayList<String>();
+    TBD startserv = new TBD();
 
     public static void main(String[] argv) throws IOException {
        
-            TBD startserv = new TBD();
-            startserv.startServer();
-             while (true){
+            
+            
+            
+//        startserv.connectClient("192.168.1.10", "1109", "What up Ernie?");
+    }
+    
+    public void searchForClients () throws IOException{
+        startserv.startServer();
+        while (!(unvalidatedIPs.isEmpty())){
             startserv.findClient();   
         }
-//        startserv.connectClient("192.168.1.10", "1109", "What up Ernie?");
     }
 
     public void startServer() {
@@ -50,7 +57,6 @@ public class TBD {
             String recievedData = conn.readAsString();
             if (checkKeyword(recievedData)) {
                 conn.sendString("BERT: You are being sent this message.");
-//                addToValideIPs(conn.getSocket().getRemoteSocketAddress().toString());
                 return true;
             }
         } catch (Throwable t) {
@@ -58,11 +64,6 @@ public class TBD {
         }
         return false;
     }
-
-//    private void addToValideIPs(String adress) {
-//        System.out.println("Adding new valid IP to list: " + adress);
-//        validatedIPs.add(adress);
-//    }
 
     public boolean checkKeyword(String recievedData) {
         boolean valid = false;
@@ -88,8 +89,11 @@ public class TBD {
         String line = "192.168.1.18";
         if (validateIncomingConnection(connectClient(line, keyword)) == true) {
             System.out.println("Adding to validatedIps: " + line);
+            validatedIPs.add(line);
         }
+        else unvalidatedIPs.add(line);
         System.out.println(validatedIPs);
+        System.out.println(unvalidatedIPs);
         return validatedIPs;
     }
 }
