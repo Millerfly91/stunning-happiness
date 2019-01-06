@@ -27,8 +27,9 @@ public class TcpClient {
     private String waitUntilRecieve() {
         while (true) {
             try {
-                Thread.sleep(100);
-                String response = conn.readAsString();
+                Thread.sleep(100); 
+               String response = conn.readAsString();
+                
                 if (response != null && response.length() > 0) {
                     return response;
                 }
