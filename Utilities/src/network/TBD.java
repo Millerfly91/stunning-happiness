@@ -18,7 +18,7 @@ import network.tcp.TcpServer;
  */
 public class TBD {
 
-    String clientAddress = "192.168.1.10";
+    String clientAddress = "192.168.1.11";
     String port = "1109";
     String keyword = "BERT";
     TcpServer server;
