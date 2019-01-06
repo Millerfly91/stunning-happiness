@@ -56,11 +56,10 @@ public class TBD {
         }
         return false;
     }
-
     private void addToValideIPs(String adress) {
         System.out.println("Adding new valid IP to list: " + adress);
         validatedIPs.add(adress);
-    }
+    } 
 
     public boolean checkKeyword(String recievedData) {
         boolean valid = false;

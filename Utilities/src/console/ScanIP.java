@@ -60,7 +60,7 @@ public class ScanIP {
 
     public static void testTest() throws IOException {
 //    List<String> results = ConsoleCommand.runCommand("nmap");
-    List<String> results = ConsoleCommand.runCommand("nmap -sP 192.168.1.1/24 -vv", 20 * 1000);
+    List<String> results = ConsoleCommand.runCommand(" ", 20 * 1000);
         results.forEach(line -> {
             System.out.println(line);
         });

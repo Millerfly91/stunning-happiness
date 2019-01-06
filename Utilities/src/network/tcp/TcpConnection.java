@@ -53,7 +53,7 @@ public class TcpConnection implements Connection {
     private void initializeConnection(Socket socket) {
         try {
             this.socket = socket;
-            this.socket.setSoTimeout(0);
+            this.socket.setSoTimeout(10000);
             this.remoteAddress = socket.getRemoteSocketAddress().toString();
             outputStream = new DataOutputStream(this.socket.getOutputStream());
             inputStream = new DataInputStream(this.socket.getInputStream());
@@ -120,7 +120,7 @@ public class TcpConnection implements Connection {
     @Override
     public String readAsString() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(0);
 //            String message = activeInput.readLine();
             String message = inputStream.readUTF();
             lastUsed_ms = System.currentTimeMillis();
