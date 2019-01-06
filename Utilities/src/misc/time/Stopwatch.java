@@ -21,11 +21,11 @@ public class Stopwatch {
         elapsedTime = -1;
     }
 
-    public void start() throws Exception {
+    public void start() {
         if (startTime <= 0) {
             startTime = getCurrentTimeInNanoseconds();
         } else {
-            throw new Exception("Stopwatch is already running.");
+            throw new RuntimeException("Stopwatch is already running.");
         }
     }
 
