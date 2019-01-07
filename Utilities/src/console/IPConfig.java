@@ -1,7 +1,11 @@
 
 import console.ConsoleCommand;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.util.Scanner;
 
 /**
  *
@@ -10,9 +14,16 @@ import java.io.IOException;
 public class IPConfig {
 
     public static void main(String[] argv) throws IOException {
-        File outputFile = new File("C:\\testical.txt");
-        outputFile.createNewFile();
-        ConsoleCommand.runCommand("ipconfig");
+//        File outputFile = new File("C:\\testical.txt");
+//        outputFile.createNewFile();
+//        ConsoleCommand.runCommand("ipconfig");
+//  
+        
+        InetAddress inetAddress = InetAddress.getLocalHost();
+        System.out.println("IP Address:- " + inetAddress.getHostAddress());
+        System.out.println("Host Name:- " + inetAddress.getHostName());
+        
+        
 
 //        executeCommandLine("ipconfig > C:\\testical.txt && exit");
 //   
