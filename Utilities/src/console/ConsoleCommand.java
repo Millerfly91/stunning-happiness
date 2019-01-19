@@ -5,13 +5,17 @@
  */
 package console;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import misc.time.Stopwatch;
 
 /**
  *
@@ -20,6 +24,11 @@ import java.util.logging.Logger;
 public class ConsoleCommand {
 
     public static void main(String[] argv) {
+        try {
+            System.out.println(runCommand("ipconfig"));
+        } catch (IOException ex) {
+            Logger.getLogger(ConsoleCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static List runCommand(String command) throws IOException {
@@ -49,6 +58,38 @@ public class ConsoleCommand {
         List<String> cmdOutputLines = readFile(cmdOutput_done);
         cmdOutput_done.delete();
         return cmdOutputLines;
+    }
+    
+     public static String quickExecute(String command) throws IOException {
+        Stopwatch runTime = new Stopwatch();
+        runTime.start();
+        Runtime rt = Runtime.getRuntime();
+        String[] commands = {command};
+        Process proc = rt.exec(command);
+
+        BufferedReader stdInput = new BufferedReader(
+                new InputStreamReader(
+                        proc.getInputStream()));
+
+        BufferedReader stdError = new BufferedReader(
+                new InputStreamReader(
+                        proc.getErrorStream()));
+
+        StringBuilder output = new StringBuilder();
+        
+        String s = null;
+        while ((s = stdInput.readLine()) != null) {
+            output.append(s).append("\n");
+        }
+        while ((s = stdError.readLine()) != null) {
+            output.append(s).append("\n");
+        }
+        
+        runTime.stop();
+        System.out.println("Command, \"" + command + "\" "
+                + "took " + runTime.elapsed(TimeUnit.SECONDS) + " seconds.");
+        proc.destroy();
+        return output.toString();
     }
 
     static List<String> readFile(File file) throws IOException {

@@ -25,11 +25,16 @@ import misc.time.Stopwatch;
  */
 public class TcpServer {
 
-    private ServerSocket socketListener;
+    private ServerSocket serverSocket;
     private int port;
+
     private ConnectionAction connectionAction;
     private ExecutorService executorService;
     private ConnectionDispatcher connDispatcher;
+
+    //Statistics
+    private Stopwatch serverSocketStopwatch;
+    private long connectionsRecieved;
 
     public static void main(String[] args) {
         TcpServer testInstance = new TcpServer(1109);
@@ -52,7 +57,7 @@ public class TcpServer {
                 }
             });
             testInstance.start();
-            Thread.sleep(5 * 60 * 1000);
+            Thread.sleep(1 * 60 * 1000);
         } catch (Throwable ex) {
             Logger.getLogger(TcpServer.class.getName()).log(
                     Level.SEVERE, "jlr logger test", ex);
@@ -66,35 +71,55 @@ public class TcpServer {
     }
 
     public TcpServer start() {
-        try {
-            System.out.println("Stating TcpServer on port: " + port + " at " + new Date(System.currentTimeMillis()));
-            socketListener = new ServerSocket(port);
-            initializeExecutorService();
-            connDispatcher = new ConnectionDispatcher(this);
-            connDispatcher.start();
-        } catch (IOException ex) {
-            Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        System.out.println(
+                "Stating TcpServer on port: " + port
+                + " at " + new Date(System.currentTimeMillis()));
+
+        startServerSocket();
+
+        startExecutorService();
+
+        startConnectionDispatcher();
+
         return this;
     }
 
-    public void stop() {
-        System.out.println("Stopping TcpServer...");
-        connDispatcher.stop();
+    private void startConnectionDispatcher() {
+        connDispatcher = new ConnectionDispatcher(this);
+        connDispatcher.start();
+    }
+
+    private void startServerSocket() {
         try {
-            socketListener.close();
+            serverSocket = new ServerSocket(port);
+            serverSocketStopwatch = new Stopwatch();
+            serverSocketStopwatch.start();
         } catch (IOException ex) {
             Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        executorService.shutdown();
+    }
+
+    public void stop() {
+        System.out.print("Stopping TcpServer...");
+
+        stopConnectionDispatcher();
+
+        stopServerSocket();
+
+        stopExecutorService();
+
+        System.out.println(" successful. "
+                + "\n   Runtime: " + serverSocketStopwatch.elapsed(TimeUnit.SECONDS) + " s"
+                + "\n   Connections Processed: " + connectionsRecieved);
     }
 
     protected TcpConnection waitForIncomingConnection() throws Exception {
         Socket s = null;
-        synchronized (socketListener) {
+        synchronized (serverSocket) {
             try {
-                s = socketListener.accept();
-
+                s = serverSocket.accept();
+                this.connectionsRecieved++;
             } catch (SocketException socketEx) {
                 if (!socketEx.getMessage().toLowerCase().contains("socket closed")) {
                     throw new Exception("Failure accepting incoming connection.", socketEx);
@@ -104,6 +129,7 @@ public class TcpServer {
         if (s == null) {
             throw new Exception("Socket recieved from listener is null.");
         }
+        
         return new TcpConnection(s);
     }
 
@@ -117,7 +143,7 @@ public class TcpServer {
         return this;
     }
 
-    private void initializeExecutorService() {
+    private void startExecutorService() {
         ThreadPoolExecutor exec = new ThreadPoolExecutor(
                 2, 2,
                 2, TimeUnit.MINUTES,
@@ -131,6 +157,23 @@ public class TcpServer {
 
     private void submitTaskToRunQueue(ConnectionTask connTask) {
         this.executorService.submit(connTask);
+    }
+
+    private void stopExecutorService() {
+        executorService.shutdown();
+    }
+
+    private void stopConnectionDispatcher() {
+        connDispatcher.stop();
+    }
+
+    private void stopServerSocket() {
+        try {
+            serverSocket.close();
+            serverSocketStopwatch.stop();
+        } catch (IOException ex) {
+            Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private class ConnectionTask implements Runnable {
@@ -157,7 +200,7 @@ public class TcpServer {
             } catch (Exception ex) {
                 Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }// peni spenis peni s
+        }  
 
     }
 
@@ -190,6 +233,7 @@ public class TcpServer {
         }
 
         public void stop() {
+            
             if (this.MY_THREAD != null) {
                 try {
                     this.continueProcessing.set(false);
@@ -206,6 +250,11 @@ public class TcpServer {
                 try {
                     dispatchIncomingConnection();
                 } catch (Exception ex) {
+                    //Always gets thrown when turning shutting down so ignore for now.
+                    if (ex.getMessage().contains("Socket")
+                            && ex.getMessage().contains("null")) {
+                        break;
+                    }
                     Logger.getLogger(TcpServer.class.getName()).log(
                             Level.SEVERE, "Failed to dispatch a request.", ex);
                 }
@@ -215,9 +264,19 @@ public class TcpServer {
 
         private void dispatchIncomingConnection() throws Exception {
 
-            TcpConnection newConnection = tcpServer.waitForIncomingConnection();
+            TcpConnection incomingConn = waitForIncomingConnection();
 
-            ConnectionTask newConnTask = tcpServer.buildNewConnectionTask(newConnection);
+            addConnectionToRunQueue(incomingConn);
+        }
+
+        private TcpConnection waitForIncomingConnection() throws Exception {
+
+            return tcpServer.waitForIncomingConnection();
+        }
+
+        private void addConnectionToRunQueue(TcpConnection conn) {
+
+            ConnectionTask newConnTask = tcpServer.buildNewConnectionTask(conn);
 
             tcpServer.submitTaskToRunQueue(newConnTask);
         }

@@ -11,11 +11,11 @@ package network.tcp.replacement;
  */
 public interface Connection {
 
-    boolean isOpen();
+    boolean isOpen() throws ConnectionException;
 
-    public void open();
+    public void open() throws ConnectionException;
 
-    public void close();
+    public void close() throws ConnectionException;
 
     public abstract boolean hasCredentials();
 
